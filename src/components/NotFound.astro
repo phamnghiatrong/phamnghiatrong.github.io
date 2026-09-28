@@ -1,0 +1,38 @@
+---
+/**
+ * Nội dung trang 404 theo ngôn ngữ. Dùng ở src/pages/404.astro (vi), en/404.astro, zh-hant/404.astro.
+ */
+import Base from '../layouts/Base.astro';
+import { useT, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useT(locale);
+---
+
+<Base locale={locale} title={t.notFound.title} alternates={false} noindex>
+  <slot name="head" slot="head" />
+  <h1 class="title">{t.notFound.title}</h1>
+  <p class="text">{t.notFound.text}</p>
+</Base>
+
+<style>
+  /* Chữ nằm trực tiếp trên nền chuyển động → màu sáng */
+  .title {
+    padding-top: 16px;
+    font-size: 40px;
+    line-height: 1.15;
+    color: var(--on-video);
+    text-shadow: var(--on-video-shadow);
+  }
+  .text {
+    margin: 12px 0 0;
+    max-width: 40em;
+    font-size: 17px;
+    color: var(--on-video-muted);
+    text-shadow: var(--on-video-shadow);
+  }
+</style>

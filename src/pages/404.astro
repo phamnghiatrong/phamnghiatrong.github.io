@@ -1,0 +1,17 @@
+---
+/**
+ * Trang 404 (GitHub Pages dùng một trang này cho mọi đường dẫn không tồn tại).
+ * Người xem đang ở bản /en/ hoặc /zh-hant/ thì chuyển ngay sang trang 404 đúng ngôn ngữ.
+ */
+import NotFound from '../components/NotFound.astro';
+---
+
+<NotFound locale="vi">
+  <script is:inline slot="head">
+    (function () {
+      var p = location.pathname;
+      var m = p.match(/^\/(en|zh-hant)\//);
+      if (m && p.indexOf('/' + m[1] + '/404') !== 0) location.replace('/' + m[1] + '/404/');
+    })();
+  </script>
+</NotFound>

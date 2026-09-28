@@ -1,0 +1,286 @@
+# Cấu hình trang quản trị (Sveltia CMS): https://phamnghiatrong.github.io/admin/
+# Mỗi ô nhập ở đây tương ứng một dòng trong file bài viết / file dữ liệu của website.
+# Đổi ô nhập thì phải khớp với kiểm tra dữ liệu trong src/content.config.ts và src/lib/data.ts.
+
+backend:
+  name: github
+  repo: phamnghiatrong/phamnghiatrong.github.io
+  branch: main
+  commit_messages:
+    create: 'Đăng {{collection}}: {{slug}}'
+    update: 'Sửa {{collection}}: {{slug}}'
+    delete: 'Xoá {{collection}}: {{slug}}'
+    uploadMedia: 'Tải ảnh {{path}}'
+    deleteMedia: 'Xoá ảnh {{path}}'
+
+site_url: https://phamnghiatrong.github.io
+display_url: https://phamnghiatrong.github.io
+
+# Thư mục ảnh chung (bắt buộc là đường dẫn tuyệt đối). Ảnh của bài viết cấu hình riêng trong mục "blog".
+media_folder: /public/uploads
+public_folder: /uploads
+
+# Tên file bài tạo từ tiêu đề: bỏ dấu, chữ thường, nối bằng gạch ngang
+slug:
+  encoding: ascii
+  clean_accents: true
+  lowercase: true
+  trim: true
+
+i18n:
+  structure: multiple_folders # src/content/blog/<vi|en|zh-hant>/<tên-bài>.md
+  locales: [vi, en, zh-hant]
+  default_locale: vi
+  initial_locales: default # bài mới chỉ có tiếng Việt; bản dịch bật tay khi cần
+
+collections:
+  # ───────────────────────────── BÀI VIẾT ─────────────────────────────
+  - name: blog
+    label: Bài viết
+    label_singular: bài viết
+    description: Viết tiếng Việt trước. Bản dịch tiếng Anh / tiếng Trung là tuỳ chọn — bật ở nút ngôn ngữ phía trên ô soạn.
+    folder: src/content/blog
+    extension: md
+    format: frontmatter
+    create: true
+    delete: true
+    i18n: true
+    slug:
+      template: '{{slug}}'
+      editable: [create]
+      hint: 'Tên file = đường dẫn bài (/blog/ten-bai/). Chữ thường không dấu, số, gạch ngang. Tạo xong không đổi được.'
+      pattern: ['^[a-z0-9]+(-[a-z0-9]+)*$', 'Chỉ dùng chữ thường không dấu, số và dấu gạch ngang, vd. dung-lab-vlan']
+    summary: '{{title}} · {{date}}'
+    sortable_fields: [date, title]
+    # Ảnh bài viết: lưu trong thư mục ảnh của bản tiếng Việt; đường dẫn ghi vào bài là ../vi/images/...
+    # nên dùng được cho cả bản vi, en, zh-hant.
+    media_folder: /src/content/blog/vi/images
+    public_folder: ../vi/images
+    fields:
+      - label: Tiêu đề
+        name: title
+        widget: string
+        i18n: true
+      - label: Tóm tắt
+        name: description
+        widget: text
+        i18n: true
+        hint: Một câu, hiện trong danh sách bài và khi chia sẻ link.
+      - label: Ngày đăng
+        name: date
+        widget: datetime
+        time_format: false
+        format: YYYY-MM-DD
+        date_format: DD/MM/YYYY
+        i18n: duplicate
+      - label: Trụ cột
+        name: tags
+        widget: select
+        multiple: true
+        min: 1
+        i18n: duplicate
+        options:
+          - { label: Lab thực hành, value: lab }
+          - { label: Tự động hoá, value: automation }
+          - { label: Tối ưu mạng, value: optimization }
+          - { label: Ngoại ngữ, value: language }
+          - { label: Hành trình, value: journey }
+      - label: Ảnh bìa
+        name: cover
+        widget: image
+        required: false
+        i18n: duplicate
+        hint: Tuỳ chọn. Ảnh ngang, rộng 1200–1600 px, dưới 1 MB. Cũng là ảnh xem trước khi chia sẻ link.
+      - label: Mô tả ảnh bìa
+        name: coverAlt
+        widget: string
+        required: false
+        i18n: true
+        hint: Mô tả ngắn nội dung ảnh (cho người khiếm thị và Google).
+      - label: Kênh đăng gốc
+        name: channel
+        widget: string
+        required: false
+        i18n: duplicate
+        hint: Tuỳ chọn, vd. LinkedIn, YouTube, Blog + GitHub.
+      - label: Ngày sửa lớn gần nhất
+        name: updated
+        widget: datetime
+        required: false
+        time_format: false
+        format: YYYY-MM-DD
+        date_format: DD/MM/YYYY
+        i18n: duplicate
+      - label: Bản nháp (chưa hiện trên website)
+        name: draft
+        widget: boolean
+        default: false
+        i18n: duplicate
+      - label: Nội dung
+        name: body
+        widget: richtext
+        i18n: true
+        hint: 'Mục lớn dùng "Heading 2" (tự vào mục lục), mục nhỏ "Heading 3".'
+
+  # ───────────────────────────── PROJECT ─────────────────────────────
+  - name: projects
+    label: Dự án
+    label_singular: dự án
+    description: Dự án khai báo tay (kể cả chưa có repo). Trùng tên repo GitHub có topic "portfolio" thì tự ghép với dữ liệu GitHub.
+    folder: src/content/projects
+    extension: md
+    format: frontmatter
+    create: true
+    delete: true
+    identifier_field: repo
+    slug: '{{fields.repo}}'
+    summary: '{{repo}} · {{period}}'
+    sortable_fields: [order, repo]
+    fields:
+      - { label: Tên repo trên GitHub, name: repo, widget: string, hint: 'Đúng tên repo, vd. config-backup' }
+      - { label: Thứ tự (số nhỏ đứng trước), name: order, widget: number, value_type: int, default: 99 }
+      - { label: Hiện trên trang Hồ sơ, name: featured, widget: boolean, default: false }
+      - { label: Thời gian, name: period, widget: string, hint: 'vd. 10 – 12/2026' }
+      - label: Trạng thái
+        name: status
+        widget: select
+        options:
+          - { label: Đang làm, value: dang-lam }
+          - { label: Dự kiến, value: du-kien }
+          - { label: Hoàn thành, value: xong }
+      - { label: Công nghệ, name: stack, widget: list, required: false, hint: 'Cách nhau dấu phẩy, vd. Python, Netmiko' }
+      - label: Tên project
+        name: title
+        widget: object
+        fields: &loc
+          - { label: Tiếng Việt, name: vi, widget: string }
+          - { label: English, name: en, widget: string }
+          - { label: 繁體中文, name: zh-hant, widget: string }
+      - label: Mô tả ngắn
+        name: description
+        widget: object
+        fields: &loctext
+          - { label: Tiếng Việt, name: vi, widget: text }
+          - { label: English, name: en, widget: text }
+          - { label: 繁體中文, name: zh-hant, widget: text }
+      - { label: Ghi chú (hiện trên trang chi tiết project), name: body, widget: richtext, required: false }
+
+  # ───────────────────────────── THÔNG TIN CV ─────────────────────────────
+  - name: cv
+    label: Thông tin CV
+    description: Nội dung trang Hồ sơ. Ô để trống hoặc ghi ẨN thì không hiện trên website.
+    editor:
+      preview: false
+    files:
+      - name: profile
+        label: Thông tin cá nhân & mạng xã hội
+        file: src/data/profile.json
+        fields:
+          - { label: Họ tên, name: name, widget: string }
+          - { label: Vai trò (dưới tên), name: role, widget: object, fields: *loc }
+          - { label: Giới thiệu, name: summary, widget: object, fields: *loctext }
+          - { label: Ngày sinh, name: birthDate, widget: string, required: false, hint: 'Dạng 2002-12-14, hoặc chỉ năm 2002' }
+          - { label: Điện thoại, name: phone, widget: string, required: false }
+          - { label: Email, name: email, widget: string, required: false }
+          - { label: Khu vực, name: area, widget: object, fields: *loc }
+          - { label: Tài khoản GitHub, name: githubUsername, widget: string }
+          - { label: Topic GitHub để hiện project, name: githubTopic, widget: string, default: portfolio }
+          - label: Mạng xã hội (dán link đầy đủ; để trống thì ẩn nút)
+            name: social
+            widget: object
+            fields:
+              - { label: GitHub, name: github, widget: string, required: false }
+              - { label: LinkedIn, name: linkedin, widget: string, required: false }
+              - { label: YouTube, name: youtube, widget: string, required: false }
+              - { label: TikTok, name: tiktok, widget: string, required: false }
+              - { label: Instagram, name: instagram, widget: string, required: false }
+              - { label: Facebook, name: facebook, widget: string, required: false }
+
+      - name: career
+        label: Định hướng nghề nghiệp
+        file: src/data/career.json
+        fields:
+          - label: Các giai đoạn
+            name: stages
+            widget: list
+            summary: '{{fields.term.vi}} · {{fields.role.vi}}'
+            fields:
+              - { label: Giai đoạn, name: term, widget: object, fields: *loc }
+              - { label: Thời gian, name: when, widget: object, fields: *loc }
+              - { label: Vị trí, name: role, widget: object, fields: *loc }
+              - { label: Mô tả, name: description, widget: object, fields: *loctext }
+          - { label: Vị trí mong muốn, name: desiredPosition, widget: object, fields: *loc }
+          - { label: Có thể bắt đầu, name: availableFrom, widget: string, hint: 'vd. 08/2027' }
+
+      - name: education
+        label: Học vấn
+        file: src/data/education.json
+        fields:
+          - label: Trường
+            name: schools
+            widget: list
+            summary: '{{fields.school.vi}} · {{fields.start}} – {{fields.end}}'
+            fields:
+              - { label: Tên trường, name: school, widget: object, fields: *loc }
+              - { label: Năm vào, name: start, widget: string }
+              - { label: Năm tốt nghiệp, name: end, widget: string }
+              - { label: Năm tốt nghiệp là dự kiến, name: endExpected, widget: boolean, default: true }
+              - { label: Ngành, name: major, widget: object, fields: *loc }
+              - { label: Môn học / ghi chú, name: courses, widget: object, fields: *loctext }
+
+      - name: skills
+        label: Kỹ năng, kỹ năng mềm, ngoại ngữ
+        file: src/data/skills.json
+        fields:
+          - label: Nhóm kỹ năng
+            name: groups
+            widget: list
+            summary: '{{fields.name.vi}}'
+            fields:
+              - { label: Tên nhóm, name: name, widget: object, fields: *loc }
+              - label: Kỹ năng
+                name: items
+                widget: list
+                summary: '{{fields.vi}}'
+                hint: 'Kỹ năng đang học thì ghi rõ "(đang học)".'
+                fields: *loc
+          - label: Kỹ năng mềm
+            name: soft
+            widget: list
+            summary: '{{fields.vi}}'
+            fields: *loc
+          - label: Ngoại ngữ
+            name: languages
+            widget: list
+            summary: '{{fields.name.vi}} · {{fields.level.vi}}'
+            fields:
+              - { label: Ngôn ngữ, name: name, widget: object, fields: *loc }
+              - { label: Trình độ, name: level, widget: object, fields: *loc }
+
+      - name: goals
+        label: Chứng chỉ và mục tiêu
+        file: src/data/goals.json
+        fields:
+          - label: Chứng chỉ / mục tiêu
+            name: goals
+            widget: list
+            summary: '{{fields.month}} · {{fields.name.vi}}'
+            fields:
+              - { label: Tên, name: name, widget: object, fields: *loc }
+              - label: Trạng thái
+                name: status
+                widget: select
+                hint: Chỉ chọn "Đã đạt" khi đã có chứng chỉ thật.
+                options:
+                  - { label: Đang ôn, value: dang-on }
+                  - { label: Đã đạt, value: dat }
+                  - { label: Kế hoạch, value: ke-hoach }
+              - label: Chữ trạng thái riêng (tuỳ chọn, vd. "Đang luyện")
+                name: label
+                widget: object
+                required: false
+                fields:
+                  - { label: Tiếng Việt, name: vi, widget: string, required: false }
+                  - { label: English, name: en, widget: string, required: false }
+                  - { label: 繁體中文, name: zh-hant, widget: string, required: false }
+              - { label: Tháng / năm dự kiến, name: month, widget: string, hint: 'vd. 04/2027' }

@@ -1,0 +1,169 @@
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  /* chừa chỗ cho thanh menu cố định khi nhảy tới #mục */
+  scroll-padding-top: 104px;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* Nền thật là mạng lưới chuyển động (components/BackgroundNetwork.astro); màu này chỉ hiện trong tích tắc đầu */
+  background: var(--bg-deep);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-weight: var(--weight);
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+
+/* Không in đậm ở bất kỳ đâu */
+h1, h2, h3, h4, h5, h6, b, strong, th, button, input, select, textarea {
+  font-weight: var(--weight);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-family: var(--font-sans);
+  text-align: left;
+  text-wrap: balance;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+a {
+  color: var(--accent);
+}
+a:hover {
+  color: var(--accent-hover);
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+img {
+  height: auto;
+}
+
+:focus-visible {
+  outline: 2px solid var(--marker);
+  outline-offset: 2px;
+}
+
+/* Đoạn văn trong nội dung căn đều, tiêu đề căn trái */
+main {
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+/* Bóng chữ rất nhẹ cho mọi chữ trong kính: giữ chữ sáng đọc rõ khi nền phía sau có chỗ sáng lên.
+   Các thành phần nền sáng (nhãn trụ cột, ô tiêu đề bảng, nút nền trắng) thì bỏ bóng. */
+main {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+main :is(.tag-label, .topic, th, .btn-ghost, input, pre) {
+  text-shadow: none;
+}
+
+/* Chữ Hán: giãn đều theo ký tự thay vì theo khoảng trắng */
+:lang(zh-Hant) main {
+  text-justify: auto;
+}
+
+/* Dấu nâu ở đầu mỗi dòng trong danh sách: ngôi sao (.star) cho Kỹ năng, Ngoại ngữ;
+   chấm tròn (.dot) cho các danh sách còn lại. Chữ xuống dòng thẳng hàng với dòng đầu. */
+.star,
+.dot {
+  position: relative;
+  padding-left: var(--star-indent);
+}
+.star::before,
+.dot::before {
+  content: '';
+  position: absolute;
+  background: var(--marker);
+}
+.star::before {
+  left: 0;
+  top: calc(0.5lh - var(--star-size) / 2);
+  width: var(--star-size);
+  height: var(--star-size);
+  -webkit-mask: var(--star-shape) center / contain no-repeat;
+  mask: var(--star-shape) center / contain no-repeat;
+}
+.dot::before {
+  left: calc((var(--star-size) - var(--dot-size)) / 2);
+  top: calc(0.5lh - var(--dot-size) / 2);
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border-radius: 50%;
+}
+
+/* Tiêu đề mục */
+.sec-h {
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line-strong);
+  margin-bottom: 4px;
+}
+
+/* Hiệu ứng hover chung cho mọi ô / dòng / thẻ (trừ thanh menu) */
+.lift {
+  position: relative;
+  transition: transform var(--ease), box-shadow var(--ease), border-color var(--ease);
+}
+.lift:hover {
+  z-index: 1;
+  transform: translateY(var(--lift));
+  box-shadow: var(--shadow-lift);
+  border-color: var(--green-hover);
+  /* nổi lên thành một ô kính mờ */
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+}
+
+/* Thuộc tính hidden luôn thắng mọi kiểu display trong CSS của component */
+[hidden] {
+  display: none !important;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+  .lift:hover {
+    transform: none;
+  }
+}

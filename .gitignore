@@ -1,0 +1,29 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+
+# environment variables
+.env
+.env.production
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+
+# riêng trên máy, không đưa lên GitHub
+.claude/
+THONG-TIN-CA-NHAN.md
+
+# tài liệu nội bộ / công cụ chỉ dùng trên máy (website không cần để build)
+CLAUDE.md
+HUONG-DAN-DANG-BAI.md
+design-reference/
+scripts/

@@ -1,0 +1,141 @@
+{
+  "groups": [
+    {
+      "name": {
+        "vi": "Mạng",
+        "en": "Networking",
+        "zh-hant": "網路"
+      },
+      "items": [
+        {
+          "vi": "Subnetting",
+          "en": "Subnetting",
+          "zh-hant": "子網劃分"
+        },
+        {
+          "vi": "VLAN, trunk",
+          "en": "VLAN, trunking",
+          "zh-hant": "VLAN、Trunk"
+        },
+        {
+          "vi": "STP",
+          "en": "STP",
+          "zh-hant": "STP"
+        },
+        {
+          "vi": "Inter-VLAN routing",
+          "en": "Inter-VLAN routing",
+          "zh-hant": "VLAN 間路由"
+        },
+        {
+          "vi": "OSPF",
+          "en": "OSPF",
+          "zh-hant": "OSPF"
+        }
+      ]
+    },
+    {
+      "name": {
+        "vi": "Tự động hóa",
+        "en": "Automation",
+        "zh-hant": "自動化"
+      },
+      "items": [
+        {
+          "vi": "Python",
+          "en": "Python",
+          "zh-hant": "Python"
+        }
+      ]
+    },
+    {
+      "name": {
+        "vi": "Ứng dụng AI",
+        "en": "AI tools",
+        "zh-hant": "AI 應用"
+      },
+      "items": [
+        {
+          "vi": "Dùng Claude, ChatGPT để viết và rà soát script",
+          "en": "Using Claude and ChatGPT to write and review scripts",
+          "zh-hant": "使用 Claude、ChatGPT 撰寫與審查腳本"
+        },
+        {
+          "vi": "tra cứu tài liệu kỹ thuật",
+          "en": "research technical docs",
+          "zh-hant": "查閱技術文件"
+        },
+        {
+          "vi": "soạn tài liệu; luôn kiểm chứng lại kết quả",
+          "en": "draft documentation; always verify the output",
+          "zh-hant": "撰寫文件，並一律自行驗證結果"
+        }
+      ]
+    }
+  ],
+  "soft": [
+    {
+      "vi": "Viết tài liệu kỹ thuật",
+      "en": "Technical writing",
+      "zh-hant": "技術文件撰寫"
+    },
+    {
+      "vi": "Tự học có kế hoạch",
+      "en": "Structured self-learning",
+      "zh-hant": "有計畫的自學"
+    },
+    {
+      "vi": "Trình bày và chia sẻ kiến thức",
+      "en": "Presenting and sharing knowledge",
+      "zh-hant": "知識分享與簡報"
+    },
+    {
+      "vi": "Làm việc nhóm",
+      "en": "Teamwork",
+      "zh-hant": "團隊合作"
+    },
+    {
+      "vi": "Chịu áp lực và quản lý thời gian",
+      "en": "Working under pressure and time management",
+      "zh-hant": "抗壓性與時間管理"
+    }
+  ],
+  "languages": [
+    {
+      "name": {
+        "vi": "Tiếng Việt",
+        "en": "Vietnamese",
+        "zh-hant": "越南語"
+      },
+      "level": {
+        "vi": "Bản ngữ",
+        "en": "Native",
+        "zh-hant": "母語"
+      }
+    },
+    {
+      "name": {
+        "vi": "Tiếng Anh",
+        "en": "English",
+        "zh-hant": "英文"
+      },
+      "level": {
+        "vi": "Đang luyện IELTS 6.5",
+        "en": "Preparing for IELTS 6.5",
+        "zh-hant": "準備 IELTS 6.5"
+      }
+    },
+    {
+      "name": {
+        "vi": "Tiếng Trung",
+        "en": "Chinese",
+        "zh-hant": "中文"
+      },
+      "level": {
+        "vi": "Đang học HSK 4",
+        "en": "Learning HSK 4",
+        "zh-hant": "學習 HSK 4 中"
+      }
+    }
+  ]
+}

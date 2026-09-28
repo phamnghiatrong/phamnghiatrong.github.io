@@ -1,0 +1,68 @@
+---
+/**
+ * Ảnh đại diện 3:4.
+ * Chép ảnh vào thư mục `assets/` ở gốc dự án, đặt tên avatar.jpg (hoặc .jpeg / .png / .webp).
+ * Chưa có ảnh thì hiện khung tạm.
+ */
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+interface Props {
+  alt: string;
+  placeholder: string;
+}
+
+const { alt, placeholder } = Astro.props;
+
+const found = import.meta.glob<{ default: ImageMetadata }>('/assets/avatar.{jpg,jpeg,png,webp}', { eager: true });
+const avatar = Object.values(found)[0]?.default;
+---
+
+{
+  avatar ? (
+    <Image
+      class="avatar"
+      src={avatar}
+      alt={alt}
+      widths={[165, 290, 330, 580]}
+      sizes="(max-width: 1023.98px) 165px, 290px"
+      loading="eager"
+      fetchpriority="high"
+    />
+  ) : (
+    <div class="avatar avatar-empty" aria-hidden="true">
+      {placeholder}
+    </div>
+  )
+}
+
+<style>
+  .avatar {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: var(--radius-tile);
+  }
+  .avatar-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1.5px dashed rgba(232, 157, 88, 0.55);
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+  }
+
+  @media (max-width: 1023.98px) {
+    .avatar {
+      width: 165px;
+      height: 220px;
+      margin: 0 auto;
+    }
+    .avatar-empty {
+      font-size: 12px;
+    }
+  }
+</style>

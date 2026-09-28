@@ -1,0 +1,31 @@
+{
+  "name": "Phạm Nghĩa Trọng",
+  "role": {
+    "vi": "Sinh viên",
+    "en": "Student",
+    "zh-hant": "學生"
+  },
+  "summary": {
+    "vi": "Mình làm lab Cisco/Juniper, tự động hóa mạng bằng Python và dùng lập trình để tối ưu định tuyến, băng thông. Đang ôn CCNA v2.0, học tiếng Anh và tiếng Trung.",
+    "en": "I build Cisco/Juniper labs, automate networks with Python, and use code to optimize routing and bandwidth. Studying for CCNA v2.0, learning English and Chinese.",
+    "zh-hant": "我做 Cisco/Juniper 實驗，用 Python 做網路自動化，並用程式最佳化路由與頻寬。正在準備 CCNA v2.0，同時學習英文和中文。"
+  },
+  "birthDate": "2002",
+  "phone": "",
+  "email": "phamnghiatrong1412@gmail.com",
+  "area": {
+    "vi": "TP. Hồ Chí Minh",
+    "en": "Ho Chi Minh City",
+    "zh-hant": "胡志明市"
+  },
+  "githubUsername": "phamnghiatrong",
+  "githubTopic": "portfolio",
+  "social": {
+    "github": "https://github.com/phamnghiatrong",
+    "linkedin": "https://www.linkedin.com/in/phamnghiatrong1412",
+    "youtube": "https://www.youtube.com/@phamnghiatrong",
+    "tiktok": "https://www.tiktok.com/@phamnghiatrong1412",
+    "instagram": "https://www.instagram.com/phamnghiatrong1412/",
+    "facebook": "https://www.facebook.com/profile.php?id=61594423276012"
+  }
+}

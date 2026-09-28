@@ -1,0 +1,113 @@
+{
+  "lang": {
+    "short": "EN",
+    "name": "English",
+    "names": {
+      "vi": "Vietnamese",
+      "en": "English",
+      "zh-hant": "Traditional Chinese"
+    }
+  },
+  "nav": {
+    "label": "Main menu",
+    "profile": "Profile",
+    "projects": "Projects",
+    "blog": "Blog",
+    "language": "Language",
+    "switchTo": "Switch to"
+  },
+  "site": {
+    "description": "Communications and Computer Networks student. Real labs, automation, network optimization.",
+    "keysLine": "Real labs · Automation · Network optimization"
+  },
+  "profile": {
+    "contactTitle": "Details",
+    "birthDate": "Date of birth",
+    "phone": "Phone",
+    "email": "Email",
+    "area": "Location",
+    "socialTitle": "Social",
+    "socialLabel": "{name} on {network}",
+    "skillsTitle": "Skills",
+    "softTitle": "Soft skills",
+    "languagesTitle": "Languages",
+    "aboutTitle": "About",
+    "careerTitle": "Career direction",
+    "desiredPosition": "Looking for",
+    "availableFrom": "Available from",
+    "projectsTitle": "Projects",
+    "projectStatus": {
+      "dang-lam": "In progress",
+      "du-kien": "Planned",
+      "xong": "Completed"
+    },
+    "educationTitle": "Education",
+    "expectedGraduation": "Expected graduation",
+    "goalsTitle": "Certifications and goals",
+    "goalStatus": {
+      "dang-on": "Studying",
+      "dat": "Achieved",
+      "ke-hoach": "Planned"
+    },
+    "postsTitle": "Latest posts",
+    "seeAll": "See all",
+    "noPosts": "The first post is coming soon.",
+    "photoAlt": "Portrait of {name}",
+    "photoPlaceholder": "Profile photo 3:4"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "text": "The page you are looking for does not exist or has moved. Use the menu above to go back."
+  },
+  "blog": {
+    "description": "Labs, automation, network optimization with code, languages, and the self-study journey. A new post every two weeks.",
+    "searchLabel": "Search posts",
+    "searchPlaceholder": "VLAN, OSPF, Netmiko…",
+    "filterLabel": "Filter by topic",
+    "all": "All",
+    "colDate": "Date",
+    "colTitle": "Title",
+    "colTag": "Topic",
+    "channel": "First posted on {channel}",
+    "viOnlyBadge": "Vietnamese only",
+    "noResults": "No posts match. Try another keyword.",
+    "noPosts": "The first post is coming soon.",
+    "noPostsInTag": "No posts in this topic yet.",
+    "viOnlyNotice": "This post is only available in Vietnamese for now.",
+    "readingTime": "{n} min read",
+    "toc": "Contents",
+    "related": "Related posts",
+    "updated": "Updated {date}",
+    "allPosts": "All posts",
+    "rssTitle": "{name}'s blog",
+    "tags": {
+      "lab": "Hands-on labs",
+      "automation": "Automation",
+      "optimization": "Network optimization",
+      "language": "Languages",
+      "journey": "Journey"
+    },
+    "views": "{n} views",
+    "colViews": "Views"
+  },
+  "projects": {
+    "colWhen": "Timeline",
+    "colProject": "Project",
+    "updated": "Updated {date}",
+    "stars": "{n} stars",
+    "viewOnGithub": "View on GitHub",
+    "homepage": "Live demo",
+    "githubProfile": "My GitHub",
+    "notesTitle": "Notes",
+    "readmeTitle": "README",
+    "planned": "This project is in the planning stage. The source code will be published on GitHub once work starts.",
+    "noReadme": "This repository has no README yet.",
+    "empty": "No projects yet.",
+    "allProjects": "All projects",
+    "stack": "Tech",
+    "topics": "Topics",
+    "language": "Language",
+    "updatedLabel": "Updated"
+  },
+  "placeholder": "This page will be built in the next step."
+}

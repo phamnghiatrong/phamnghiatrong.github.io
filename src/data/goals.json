@@ -1,0 +1,52 @@
+{
+  "goals": [
+    {
+      "name": {
+        "vi": "CCNA 200-301 v2.0",
+        "en": "CCNA 200-301 v2.0",
+        "zh-hant": "CCNA 200-301 v2.0"
+      },
+      "status": "dang-on",
+      "label": null,
+      "month": "04/2027"
+    },
+    {
+      "name": {
+        "vi": "IELTS Academic 6.5",
+        "en": "IELTS Academic 6.5",
+        "zh-hant": "IELTS Academic 6.5"
+      },
+      "status": "dang-on",
+      "label": {
+        "vi": "Đang luyện",
+        "en": "Practising",
+        "zh-hant": "練習中"
+      },
+      "month": "06/2027"
+    },
+    {
+      "name": {
+        "vi": "HSK 4 + HSKK",
+        "en": "HSK 4 + HSKK",
+        "zh-hant": "HSK 4 + HSKK"
+      },
+      "status": "dang-on",
+      "label": {
+        "vi": "Đang học",
+        "en": "Learning",
+        "zh-hant": "學習中"
+      },
+      "month": "08/2027"
+    },
+    {
+      "name": {
+        "vi": "Thực tập mạng",
+        "en": "Network internship",
+        "zh-hant": "網路相關實習"
+      },
+      "status": "ke-hoach",
+      "label": null,
+      "month": "08/2027"
+    }
+  ]
+}

@@ -1,0 +1,444 @@
+---
+/**
+ * Trang bài viết. Mỗi bài có đủ 3 đường dẫn (/blog/x/, /en/blog/x/, /zh-hant/blog/x/).
+ * Ngôn ngữ nào chưa có bản dịch thì hiện bản tiếng Việt kèm dòng thông báo — không trả 404.
+ */
+import { render } from 'astro:content';
+import { Image, getImage } from 'astro:assets';
+import Base from '../../../layouts/Base.astro';
+import TagLabel from '../../../components/blog/TagLabel.astro';
+import ViewCount from '../../../components/ViewCount.astro';
+import '../../../styles/prose.css';
+import { DEFAULT_LOCALE, HTML_LANG, LOCALES, localizePath, useT, type Locale } from '../../../i18n';
+import { formatPostDate, getPosts, readingMinutes, relatedPosts } from '../../../lib/blog';
+import { profile } from '../../../lib/data';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const locale of LOCALES) {
+    for (const post of await getPosts(locale)) {
+      paths.push({
+        params: { lang: locale === DEFAULT_LOCALE ? undefined : locale, slug: post.slug },
+        props: { locale, slug: post.slug },
+      });
+    }
+  }
+  return paths;
+}
+
+const { locale, slug } = Astro.props as { locale: Locale; slug: string };
+const t = useT(locale);
+const b = t.blog;
+const fill = (template: string, values: Record<string, string>) =>
+  template.replace(/\{(\w+)\}/g, (_, key) => values[key] ?? '');
+
+const posts = await getPosts(locale);
+const post = posts.find((p) => p.slug === slug)!;
+const d = post.entry.data;
+const { Content, headings } = await render(post.entry);
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const related = relatedPosts(post, posts);
+const minutes = readingMinutes(post.entry.body);
+const contentLang = HTML_LANG[post.contentLocale];
+const iso = (date: Date) => date.toISOString().slice(0, 10);
+
+// Ảnh xem trước khi chia sẻ: ảnh bìa (nếu có), không thì ảnh chung của site
+const ogCover = d.cover ? await getImage({ src: d.cover, width: 1200, format: 'jpg' }) : null;
+const image = ogCover
+  ? {
+      src: ogCover.src,
+      width: Number(ogCover.attributes.width),
+      height: Number(ogCover.attributes.height),
+      alt: d.coverAlt,
+    }
+  : undefined;
+
+// Dữ liệu có cấu trúc cho Google: bài viết (schema.org/BlogPosting)
+const postUrl = new URL(localizePath(locale, `/blog/${slug}/`), Astro.site).href;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: d.title,
+  description: d.description,
+  datePublished: d.date.toISOString(),
+  dateModified: (d.updated ?? d.date).toISOString(),
+  inLanguage: contentLang,
+  mainEntityOfPage: postUrl,
+  url: postUrl,
+  image: new URL(image?.src ?? `/og/og-${locale}.jpg`, Astro.site).href,
+  keywords: d.tags.map((tag) => b.tags[tag]).join(', '),
+  author: { '@type': 'Person', name: profile.name, url: new URL(localizePath(locale, '/'), Astro.site).href },
+};
+---
+
+<Base
+  locale={locale}
+  title={d.title}
+  description={d.description}
+  current="blog"
+  ogType="article"
+  alternateLocales={post.available}
+  canonicalPath={post.translated ? undefined : `/blog/${slug}/`}
+  statsPath={`/blog/${slug}/`}
+  image={image}
+  jsonLd={jsonLd}
+>
+  <article class="post">
+    <header class="post-head">
+      <h1 class="post-title" lang={post.translated ? undefined : contentLang}>{d.title}</h1>
+      <p class="post-desc" lang={post.translated ? undefined : contentLang}>{d.description}</p>
+      <div class="post-meta">
+        <span><time datetime={iso(d.date)}>{formatPostDate(d.date, locale)}</time></span>
+        {
+          d.updated && (
+            <span>
+              {fill(b.updated, { date: formatPostDate(d.updated, locale) })}
+            </span>
+          )
+        }
+        <span>{fill(b.readingTime, { n: String(minutes) })}</span>
+        <ViewCount path={`/blog/${slug}/`} template={b.views} />
+        {d.channel && <span>{fill(b.channel, { channel: d.channel })}</span>}
+        <span class="meta-tags">
+          {d.tags.map((tag) => <TagLabel tag={tag} locale={locale} href={localizePath(locale, `/blog/tag/${tag}/`)} />)}
+        </span>
+      </div>
+    </header>
+
+    {!post.translated && <p class="notice">{b.viOnlyNotice}</p>}
+
+    {
+      d.cover && (
+        <Image
+          class="cover"
+          src={d.cover}
+          alt={d.coverAlt ?? ''}
+          widths={[400, 800, 1200]}
+          sizes="(max-width: 1023.98px) 100vw, 900px"
+          loading="eager"
+          fetchpriority="high"
+        />
+      )
+    }
+
+    <div class:list={['post-body', { 'has-toc': toc.length > 1 }]}>
+      {
+        toc.length > 1 && (
+          <details class="toc toc-mobile">
+            <summary>{b.toc}</summary>
+            <ol>
+              {toc.map((h) => (
+                <li class:list={[`depth-${h.depth}`]}>
+                  <a href={`#${h.slug}`}>{h.text}</a>
+                </li>
+              ))}
+            </ol>
+          </details>
+        )
+      }
+
+      <div class="prose article-box" lang={contentLang}>
+        <Content />
+      </div>
+
+      {
+        toc.length > 1 && (
+          <nav class="toc toc-desktop" aria-label={b.toc}>
+            <p class="toc-title">{b.toc}</p>
+            <ol>
+              {toc.map((h) => (
+                <li class:list={[`depth-${h.depth}`]}>
+                  <a href={`#${h.slug}`}>{h.text}</a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )
+      }
+    </div>
+
+    <section class:list={['related', { boxed: related.length > 0 }]}>
+      {
+        related.length > 0 && (
+          <>
+          <h2 class="sec-h">{b.related}</h2>
+          <ul>
+            {related.map((r) => (
+              <li>
+                <a class="rel-row lift" href={r.href}>
+                  <span class="rel-date dot">
+                    <time datetime={iso(r.entry.data.date)}>{formatPostDate(r.entry.data.date, locale)}</time>
+                  </span>
+                  <span class="rel-title" lang={r.translated ? undefined : 'vi'}>
+                    {r.entry.data.title}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          </>
+        )
+      }
+      <a class="all-posts" href={localizePath(locale, '/blog/')}>
+        {b.allPosts} →
+      </a>
+    </section>
+  </article>
+</Base>
+
+<style>
+  .post {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  /* ---------- Đầu bài ---------- */
+  .post-head {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 900px;
+    padding-top: 16px;
+  }
+  /* Phần đầu bài nằm trực tiếp trên video nền → chữ sáng */
+  .post-title {
+    font-size: 40px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--on-video);
+    text-shadow: var(--on-video-shadow);
+    text-align: justify;
+    text-wrap: wrap;
+  }
+  .post-desc {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--on-video-muted);
+    text-shadow: var(--on-video-shadow);
+  }
+  .post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 20px;
+    margin-top: 4px;
+    font-size: 14px;
+    color: var(--on-video-muted);
+    text-shadow: var(--on-video-shadow);
+    text-align: left;
+  }
+  .meta-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .notice {
+    margin: 0;
+    max-width: 900px;
+    padding: 10px 14px;
+    border-radius: var(--radius-btn);
+    background: rgba(232, 157, 88, 0.14);
+    border: 1px solid rgba(232, 157, 88, 0.35);
+    color: var(--brown);
+    font-size: 14px;
+  }
+
+  .cover {
+    display: block;
+    width: 100%;
+    max-width: 900px;
+    height: auto;
+    border-radius: var(--radius-tile);
+    border: 1px solid var(--line);
+  }
+
+  /* ---------- Thân bài + mục lục ---------- */
+  .post-body {
+    display: grid;
+    grid-template-columns: minmax(0, 46rem);
+    gap: 56px;
+    align-items: start;
+  }
+  .post-body.has-toc {
+    grid-template-columns: minmax(0, 46rem) 240px;
+  }
+
+  .toc ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .toc li.depth-3 {
+    padding-left: 14px;
+  }
+  .toc a {
+    display: block;
+    padding: 5px 0;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--muted);
+    text-decoration: none;
+    text-align: left;
+  }
+  .toc a:hover {
+    color: var(--accent);
+  }
+  /* Thân bài, mục lục, bài liên quan: chữ dài nên đặt trong ô kính mờ */
+  .article-box,
+  .toc-desktop,
+  .related.boxed {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+    border-radius: var(--radius-panel);
+  }
+  .article-box {
+    padding: 28px 32px;
+  }
+  .toc-desktop {
+    position: sticky;
+    top: 104px;
+    padding: 16px 18px;
+  }
+  .toc-title {
+    margin: 0 0 6px;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-align: left;
+  }
+  .toc-mobile {
+    display: none;
+  }
+
+  /* ---------- Bài liên quan ---------- */
+  .related {
+    max-width: 46rem;
+    margin-top: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .related ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .rel-row {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 24px;
+    align-items: baseline;
+    padding: 14px 18px;
+    border: 1px solid transparent;
+    border-bottom-color: var(--line-soft);
+    border-radius: var(--radius-row);
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .rel-row:hover {
+    color: var(--ink);
+  }
+  .rel-row:hover .rel-title {
+    color: var(--accent);
+  }
+  .rel-date {
+    font-size: 13px;
+    color: var(--muted);
+    text-align: left;
+  }
+  .rel-title {
+    font-size: 16px;
+    line-height: 1.4;
+    transition: color var(--ease);
+  }
+  .all-posts {
+    align-self: flex-end;
+    margin-top: 8px;
+    font-size: 14px;
+    text-decoration: none;
+  }
+  .all-posts:hover {
+    color: var(--brown);
+  }
+  .related.boxed {
+    padding: 20px 24px;
+  }
+  /* Không có bài liên quan: link nằm trực tiếp trên video → chữ sáng */
+  .related:not(.boxed) .all-posts {
+    align-self: flex-start;
+    color: var(--on-video);
+    text-shadow: var(--on-video-shadow);
+  }
+  .related:not(.boxed) .all-posts:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 1023.98px) {
+    .post {
+      gap: 22px;
+    }
+    .post-head {
+      padding-top: 0;
+    }
+    .post-title {
+      font-size: 26px;
+    }
+    .post-desc {
+      font-size: 16px;
+    }
+    .post-body,
+    .post-body.has-toc {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 20px;
+    }
+    .toc-desktop {
+      display: none;
+    }
+    .article-box {
+      padding: 20px 14px;
+    }
+    .related.boxed {
+      padding: 16px 12px;
+    }
+    .toc-mobile {
+      display: block;
+      padding: 12px 14px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      -webkit-backdrop-filter: var(--glass-blur);
+      backdrop-filter: var(--glass-blur);
+      box-shadow: var(--glass-shadow);
+      border-radius: var(--radius-row);
+    }
+    .toc-mobile summary {
+      cursor: pointer;
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-align: left;
+    }
+    .toc-mobile ol {
+      margin-top: 8px;
+    }
+    .rel-row {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 4px;
+      padding: 12px 10px;
+      border-radius: var(--radius-btn);
+    }
+    .rel-title {
+      padding-left: var(--star-indent);
+    }
+  }
+</style>

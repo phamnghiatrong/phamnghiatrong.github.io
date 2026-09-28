@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Trang chủ điện thoại</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&amp;family=Noto+Sans+TC:wght@400&amp;display=swap">
+<style>
+body{margin:0;font-family:"Roboto",system-ui,sans-serif;color:#1E2420;background:#FAF8F4}
+a{color:#2A6E47}a:hover{color:#368A58}
+h1,h2,h3{font-weight:400;font-family:"Roboto",sans-serif;margin:0;text-wrap:balance}
+.icon-btn{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:10px;border:1px solid #D9D2C5;background:#FFFFFF;color:#2A6E47;cursor:pointer}
+.icon-btn.dark{border-color:rgba(255,255,255,.2);background:transparent;color:#FFFFFF}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;height:50px;border-radius:10px;font-weight:400;font-size:16px;text-decoration:none;border:1.5px solid transparent;transition:background .18s ease-out,transform .18s ease-out,box-shadow .18s ease-out}
+.btn-p{background:#2A6E47;color:#FFFFFF}
+.btn-p:hover{background:#368A58;color:#FFFFFF;transform:translateY(-2px);box-shadow:0 12px 24px -16px rgba(42,110,71,.55)}
+.btn-g{background:#FFFFFF;color:#2A6E47;border-color:#B7CDBE}
+.btn-g:hover{border-color:#368A58;transform:translateY(-2px);box-shadow:0 12px 24px -16px rgba(42,110,71,.55)}
+.lang{flex:1;height:34px;padding:0 8px;border-radius:8px;border:1px solid rgba(255,255,255,.22);background:transparent;color:#DCEBE0;font:400 13px "Roboto","Noto Sans TC",sans-serif;cursor:pointer;transition:background .18s ease-out}
+.lang.on{background:#FAF8F4;color:#2A6E47;border-color:#FAF8F4}
+.lift{transition:transform .18s ease-out,box-shadow .18s ease-out,border-color .18s ease-out;position:relative}
+.lift:hover{transform:translateY(-3px);box-shadow:0 12px 24px -16px rgba(42,110,71,.55);border-color:#368A58;background-color:#FFFFFF;z-index:1}
+.soc-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:42px;padding:0 8px;border:1px solid #2A6E47;border-radius:8px;background:#2A6E47;color:#FFFFFF;font:400 13px "Roboto",sans-serif;text-decoration:none;transition:background .18s ease-out,transform .18s ease-out,box-shadow .18s ease-out,border-color .18s ease-out}
+.soc-btn:hover{color:#FFFFFF;background:#368A58;border-color:#368A58;transform:translateY(-3px);box-shadow:0 12px 24px -16px rgba(42,110,71,.55)}
+main{text-align:justify;text-justify:inter-word}
+main h1,main h2,main h3{text-align:left}
+.tile{display:flex;align-items:center;gap:12px;width:100%;box-sizing:border-box;height:48px;padding:0 14px;border:1px solid rgba(255,255,255,.18);border-radius:12px;background:transparent;color:#DCEBE0;text-decoration:none;font:400 15px "Roboto","Noto Sans TC",sans-serif;white-space:nowrap;overflow:hidden;cursor:pointer;transition:background .18s ease-out,border-color .18s ease-out,color .18s ease-out}
+.tile:hover{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.34);color:#FFFFFF}
+.tile.on{background:#E4F0E7;border-color:#E4F0E7;color:#2A6E47;box-shadow:inset 3px 0 0 #7A4B28}
+.tile.static{cursor:default}
+.tile.static:hover{background:transparent;border-color:rgba(255,255,255,.18);color:#DCEBE0}
+.sec-h{font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:#2A6E47;padding-bottom:8px;border-bottom:1px solid #D9D2C5;margin-bottom:4px;font-weight:400}
+.kv{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:10px 10px;border:1px solid transparent;border-bottom-color:#EFEBE3;border-radius:8px}
+.kv-k{font-size:13px;color:#5E6B62}
+.kv-v{font-size:15px;color:#1E2420;text-align:right;min-width:0}
+.m-row{display:flex;flex-direction:column;gap:4px;padding:12px 10px;border:1px solid transparent;border-bottom-color:#EFEBE3;border-radius:8px}
+.cv-when{font-size:13px;color:#4E2C15}
+.cv-title{font-size:16px;color:#1E2420;line-height:1.4}
+.cv-sub{font-size:14.5px;color:#3C4740}
+.cv-text{font-size:14.5px;color:#5E6B62;line-height:1.6}
+.cv-meta{font-size:12.5px;color:#5E6B62}
+.soc-btn{width:100%;box-sizing:border-box;justify-content:flex-start;padding:0 12px}
+:focus-visible{outline:2px solid #7A4B28;outline-offset:2px}
+</style>
+</helmet>
+<div style="width: 390px; height: 3560px; position: relative; background: #FAF8F4; overflow: hidden">
+  <header style="margin: 12px 12px 0; background: #2A6E47; border-radius: 18px; padding: 8px; display: flex; gap: 6px">
+  <nav aria-label="Menu chính" style="display: flex; gap: 6px; flex: 4">
+    <a class="tile on" href="Mobile.dc.html" aria-current="page" style="flex: 1; width: auto; height: 58px; padding: 0 4px; flex-direction: column; justify-content: center; gap: 4px; font-size: 12px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path><path d="M9.5 21v-6h5v6"></path></svg><span>Hồ sơ</span></a>
+    <a class="tile" href="Main.dc.html" style="flex: 1; width: auto; height: 58px; padding: 0 4px; flex-direction: column; justify-content: center; gap: 4px; font-size: 12px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="2.5"></circle><circle cx="6" cy="18" r="2.5"></circle><circle cx="18" cy="8" r="2.5"></circle><path d="M6 8.5v7"></path><path d="M18 10.5c0 4-5 4-10 6"></path></svg><span>Project</span></a>
+    <a class="tile" href="Blog.dc.html" style="flex: 1; width: auto; height: 58px; padding: 0 4px; flex-direction: column; justify-content: center; gap: 4px; font-size: 12px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"></path><path d="M22 5h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"></path></svg><span>Blog</span></a>
+  </nav>
+  <button class="tile" type="button" onClick="{{cycleLang}}" aria-label="Đổi ngôn ngữ" style="flex: 1; width: auto; height: 58px; padding: 0 4px; flex-direction: column; justify-content: center; gap: 4px; font-size: 12px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"></path></svg><span>{{langShort}}</span></button>
+</header>
+
+  <main style="display: flex; flex-direction: column; gap: 36px; padding: 24px 16px 32px">
+    <section style="display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center">
+      <div style="width: 165px; height: 220px; border-radius: 12px; background: #EFE6DA; border: 1.5px dashed #C9A27E; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #4E2C15">[Ảnh đại diện 3:4]</div>
+      <h1 style="font-size: 28px; line-height: 1.2; color: #1E2420; text-align: center; white-space: nowrap">Phạm Nghĩa Trọng</h1>
+      <span style="font-size: 15px; color: #2A6E47; text-align: center">Sinh viên Viễn thông · hướng Network Automation</span>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 4px">
+      <h2 class="sec-h">Thông tin</h2>
+        <div class="kv lift"><span class="kv-k">Ngày sinh</span><span class="kv-v">[dd/mm/yyyy]</span></div>
+        <div class="kv lift"><span class="kv-k">Điện thoại</span><span class="kv-v">[số điện thoại]</span></div>
+        <div class="kv lift"><span class="kv-k">Email</span><span class="kv-v">[email]</span></div>
+        <div class="kv lift"><span class="kv-k">Khu vực</span><span class="kv-v">[Thành phố]</span></div>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 4px">
+      <h2 class="sec-h">Mạng xã hội</h2>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 8px">
+        <a class="soc-btn" href="https://github.com/" aria-label="GitHub của Phạm Nghĩa Trọng"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 7-5 5 5 5M16 7l5 5-5 5"></path></svg>GitHub</a>
+        <a class="soc-btn" href="https://www.linkedin.com/" aria-label="LinkedIn của Phạm Nghĩa Trọng"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5h6v2M3 13h18"></path></svg>LinkedIn</a>
+        <a class="soc-btn" href="https://www.youtube.com/" aria-label="YouTube của Phạm Nghĩa Trọng"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="4"></rect><path d="m10 9 5 3-5 3z"></path></svg>YouTube</a>
+        <a class="soc-btn" href="https://www.tiktok.com/" aria-label="TikTok của Phạm Nghĩa Trọng"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l10-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="16" cy="16" r="3"></circle></svg>TikTok</a>
+        <a class="soc-btn" href="https://www.instagram.com/" aria-label="Instagram của Phạm Nghĩa Trọng"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg>Instagram</a>
+        <a class="soc-btn" href="https://www.facebook.com/" aria-label="Facebook của Phạm Nghĩa Trọng"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c0-3.5 3-6 6.5-6s6.5 2.5 6.5 6"></path><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14c2 .7 3.5 2.8 3.5 6"></path></svg>Facebook</a>
+      </div>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 10px">
+      <h2 class="sec-h">Giới thiệu</h2>
+      <p style="margin: 0; font-size: 15.5px; line-height: 1.7; color: #1E2420">Mình làm lab Cisco/Juniper, tự động hóa mạng bằng Python và dùng code để tối ưu định tuyến, băng thông. Đang ôn CCNA v2.0, học tiếng Anh và tiếng Trung.</p>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 4px">
+      <h2 class="sec-h">Định hướng nghề nghiệp</h2>
+        <div class="m-row lift"><span class="cv-when">Ngắn hạn · 2026 – 2027</span><span class="cv-title">Thực tập sinh Network / NOC</span><span class="cv-text">Đạt CCNA v2.0, hoàn thành 3 project tự động hóa trên GitHub và có kinh nghiệm vận hành mạng thực tế qua kỳ thực tập.</span></div>
+        <div class="m-row lift"><span class="cv-when">Trung hạn · 2028 – 2030</span><span class="cv-title">Network Engineer</span><span class="cv-text">Thiết kế, triển khai và vận hành hạ tầng mạng doanh nghiệp; ôn CCNP Enterprise; đưa tự động hóa vào công việc vận hành hằng ngày.</span></div>
+        <div class="m-row lift"><span class="cv-when">Dài hạn · 2030 trở đi</span><span class="cv-title">Network Automation Engineer</span><span class="cv-text">Chuyên sâu tự động hóa và tối ưu mạng bằng code, làm việc được bằng tiếng Anh và tiếng Trung với đối tác quốc tế.</span></div>
+        <div class="kv lift"><span class="kv-k">Vị trí mong muốn</span><span class="kv-v">Thực tập Network / NOC</span></div>
+        <div class="kv lift"><span class="kv-k">Có thể bắt đầu</span><span class="kv-v">09/2027</span></div>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 4px">
+      <h2 class="sec-h">Project</h2>
+        <div class="m-row lift"><span class="cv-when">10 – 12/2026 · <span style="color: #1E7A45">Đang làm</span></span><span class="cv-title">Backup cấu hình tự động</span><span class="cv-text">Lấy running-config nhiều thiết bị cùng lúc, lưu theo ngày, báo thiết bị lỗi kết nối.</span><span class="cv-meta">Python · Netmiko · github.com/[handle]/config-backup</span></div>
+        <div class="m-row lift"><span class="cv-when">01 – 04/2027 · <span style="color: #7A6A5A">Dự kiến</span></span><span class="cv-title">Tối ưu định tuyến và băng thông</span><span class="cv-text">Quy hoạch tuyến tính chia băng thông, đường đi ngắn nhất và đường dự phòng.</span><span class="cv-meta">NetworkX · PuLP · github.com/[handle]/net-optimizer</span></div>
+        <div class="m-row lift"><span class="cv-when">05 – 08/2027 · <span style="color: #7A6A5A">Dự kiến</span></span><span class="cv-title">Lab BGP dựng bằng code</span><span class="cv-text">Topology BGP khai báo trong một file, dựng lại trong vài phút.</span><span class="cv-meta">containerlab · FRR · Ansible · github.com/[handle]/bgp-lab-as-code</span></div>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 4px">
+      <h2 class="sec-h">Học vấn</h2>
+        <div class="m-row lift"><span class="cv-when">[năm vào] – [năm TN]</span><span class="cv-title">[Tên trường]</span><span class="cv-sub">Ngành Viễn thông</span><span class="cv-text">Môn học kỳ này: Quản trị hạ tầng mạng nâng cao, Quản trị Linux, Quản trị Windows, Mạng cáp quang và ứng dụng.</span></div>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 4px">
+      <h2 class="sec-h">Kỹ năng</h2>
+        <div class="m-row lift"><span class="kv-k">Mạng</span><span class="kv-v" style="text-align: left">Subnetting, VLAN, trunk, STP, Inter-VLAN routing, OSPF</span></div>
+        <div class="m-row lift"><span class="kv-k">Công cụ lab</span><span class="kv-v" style="text-align: left">Packet Tracer, GNS3, containerlab</span></div>
+        <div class="m-row lift"><span class="kv-k">Tự động hóa</span><span class="kv-v" style="text-align: left">Python, Netmiko, Ansible (đang học), NetBox (đang học)</span></div>
+        <div class="m-row lift"><span class="kv-k">Hệ thống</span><span class="kv-v" style="text-align: left">Linux, Windows Server</span></div>
+        <div class="m-row lift"><span class="kv-k">Tối ưu mạng</span><span class="kv-v" style="text-align: left">NetworkX, PuLP</span></div>
+        <div class="m-row lift"><span class="kv-k">Ứng dụng AI</span><span class="kv-v" style="text-align: left">Dùng Claude, ChatGPT để viết và rà soát script, tra cứu tài liệu kỹ thuật, soạn tài liệu; luôn kiểm chứng lại kết quả</span></div>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 4px">
+      <h2 class="sec-h">Kỹ năng mềm</h2>
+        <div class="kv lift"><span class="kv-v" style="text-align: left">Viết tài liệu kỹ thuật</span></div>
+        <div class="kv lift"><span class="kv-v" style="text-align: left">Tự học có kế hoạch</span></div>
+        <div class="kv lift"><span class="kv-v" style="text-align: left">Trình bày và chia sẻ kiến thức</span></div>
+        <div class="kv lift"><span class="kv-v" style="text-align: left">Làm việc nhóm</span></div>
+        <div class="kv lift"><span class="kv-v" style="text-align: left">Chịu áp lực và quản lý thời gian</span></div>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 4px">
+      <h2 class="sec-h">Ngoại ngữ</h2>
+        <div class="kv lift"><span class="kv-k">Tiếng Việt</span><span class="kv-v">Bản ngữ</span></div>
+        <div class="kv lift"><span class="kv-k">English</span><span class="kv-v">Đang luyện IELTS 6.5</span></div>
+        <div class="kv lift"><span class="kv-k">中文</span><span class="kv-v">Đang học HSK 1</span></div>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 4px">
+      <h2 class="sec-h">Chứng chỉ và mục tiêu</h2>
+        <div class="kv lift"><span class="kv-v" style="text-align: left">CCNA 200-301 v2.0<br><span class="kv-k">04/2027</span></span><span style="font-size: 14px; color: #1E7A45">Đang ôn</span></div>
+        <div class="kv lift"><span class="kv-v" style="text-align: left">IELTS Academic 6.5<br><span class="kv-k">06/2027</span></span><span style="font-size: 14px; color: #1E7A45">Đang luyện</span></div>
+        <div class="kv lift"><span class="kv-v" style="text-align: left">HSK 3 + HSKK<br><span class="kv-k">08/2027</span></span><span style="font-size: 14px; color: #1E7A45">Đang học</span></div>
+        <div class="kv lift"><span class="kv-v" style="text-align: left">Thực tập mạng<br><span class="kv-k">09/2027</span></span><span style="font-size: 14px; color: #7A6A5A">Kế hoạch</span></div>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 4px">
+      <h2 class="sec-h">Bài viết mới</h2>
+        <div class="m-row lift"><span class="cv-when">Tuần 1 · 10/2026</span><span class="cv-title">Mình là ai và vì sao bắt đầu học công khai</span><span class="cv-meta">Hành trình · [lượt xem]</span></div>
+        <div class="m-row lift"><span class="cv-when">Tuần 2 · 10/2026</span><span class="cv-title">Dựng lab VLAN + Inter-VLAN routing từ con số 0</span><span class="cv-meta">Lab thực hành · [lượt xem]</span></div>
+        <div class="m-row lift"><span class="cv-when">Tuần 3 · 10/2026</span><span class="cv-title">Backup cấu hình 10 thiết bị trong 30 giây với Netmiko</span><span class="cv-meta">Tự động hóa · [lượt xem]</span></div>
+    </section>
+
+    <footer style="text-align: center; padding-top: 18px; border-top: 1px solid #E2DDD3; font-size: 13px; color: #5E6B62">© 2026 Phạm Nghĩa Trọng · Lab thật · Tự động hóa · Tối ưu mạng</footer>
+  </main>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":3560}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { lang: 'VI' };
+  }
+  renderVals() {
+    var self = this;
+    var order = ['VI', 'EN', '繁中'];
+    var lang = this.state.lang || 'VI';
+    return {
+      langShort: lang,
+      cycleLang: function () { self.setState({ lang: order[(order.indexOf(lang) + 1) % 3] }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

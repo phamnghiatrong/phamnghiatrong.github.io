@@ -1,0 +1,91 @@
+/*
+ * Mọi màu, khoảng cách, bo góc của site nằm ở đây.
+ * Đổi một giá trị ở đây là cả site đổi theo.
+ */
+:root {
+  /* Màu chính */
+  --green: #2a6e47;         /* thanh menu, tiêu đề mục, link, nút mạng xã hội */
+  --green-hover: #368a58;   /* hover của mọi thứ màu xanh, viền khi hover */
+  --green-soft: #e4f0e7;    /* mục menu đang chọn, nhãn trụ cột blog */
+  --brown: #e89d58;         /* mốc thời gian, nhãn phụ (nâu sáng trên nền tối) */
+  --brown-line: #7a4b28;    /* vạch trái mục menu đang chọn (trên ô xanh nhạt) */
+
+  /* Nền và chữ */
+  --ground: #faf8f4;        /* nền trang */
+  --panel: #ffffff;         /* trắng đặc (ô nhập liệu, nút nền trắng) */
+  /* Giao diện tối kiểu kính Apple: mọi chữ nằm trên nền tối (nền chuyển động hoặc ô kính) */
+  --ink: #f1f6f3;           /* chữ chính */
+  --ink-soft: #e4ede8;      /* chữ phụ đậm hơn (dòng ngành học...) */
+  --muted: #d2ddd6;         /* chữ phụ */
+  --line: rgba(255, 255, 255, 0.16);        /* viền */
+  --line-soft: rgba(255, 255, 255, 0.09);   /* đường kẻ giữa các dòng */
+  --line-strong: rgba(255, 255, 255, 0.24); /* đường kẻ dưới tiêu đề mục */
+  --accent: #43c977;        /* chữ nhấn màu xanh trên nền tối: tiêu đề mục, link, vai trò */
+  --accent-hover: #6fdc98;
+  --marker: #e89d58;        /* dấu chấm / sao đầu dòng, viền focus (nâu sáng) */
+
+  /* Nền chuyển động (components/BackgroundNetwork.astro) và chữ nằm trực tiếp trên nền đó.
+     Tên biến "on-video" giữ từ bản dùng video trước đây. */
+  --bg-deep: #0c2530;                      /* màu nền trước khi phần chuyển động vẽ xong */
+  --on-video: #ffffff;                      /* chữ chính trên video */
+  --on-video-muted: #cfded6;                /* chữ phụ trên video */
+  --on-video-line: rgba(255, 255, 255, 0.22); /* đường kẻ trên video */
+  --on-video-shadow: 0 1px 3px rgba(0, 0, 0, 0.7); /* bóng chữ nhẹ để chữ trắng luôn đọc được trên video */
+  --brown-on-video: #e89d58;                /* dấu chấm/sao nâu khi nằm trên video (nâu sáng cho đủ tương phản) */
+  --ok-on-video: #43c977;                   /* trạng thái "Đang làm" trên video */
+  --plan-on-video: #dcc6a8;                 /* trạng thái "Dự kiến" trên video */
+
+  /* Ô kính kiểu Apple: kính trong, màu đều khắp ô (không có vùng sáng ở góc), viền mỏng đều bốn cạnh.
+     Lớp tối rất nhẹ bên trong giữ chữ sáng không bị chìm khi nền phía sau có chỗ sáng. */
+  --glass-bg:
+    linear-gradient(rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.06)) padding-box,
+    linear-gradient(rgba(6, 22, 30, 0.08), rgba(6, 22, 30, 0.08)) padding-box,
+    linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)) border-box;
+  --glass-inner: rgba(255, 255, 255, 0.06);        /* ô nhỏ nằm trong ô kính */
+  --glass-border: transparent;
+  --glass-blur: blur(10px) saturate(170%);
+  --glass-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.7);
+
+  /* Trạng thái */
+  --ok: #43c977;            /* Đang làm / Đang ôn */
+  --plan: #eadac3;          /* Dự kiến / Kế hoạch */
+
+  /* Thanh menu */
+  --nav-ink: #dcebe0;                        /* chữ mục menu */
+  --nav-tile-line: rgba(255, 255, 255, 0.18); /* viền ô menu */
+  --nav-tile-line-hover: rgba(255, 255, 255, 0.34);
+  --nav-tile-hover: rgba(255, 255, 255, 0.1);
+  --nav-lang-line: rgba(255, 255, 255, 0.22);
+  --nav-lang-hover: rgba(255, 255, 255, 0.12);
+
+  /* Chữ — một font, một độ đậm */
+  --font-sans: var(--font-roboto), var(--font-noto-tc), system-ui, sans-serif;
+  --weight: 400;
+
+  /* Bo góc */
+  --radius-nav: 20px;
+  --radius-panel: 16px;
+  --radius-tile: 12px;
+  --radius-row: 10px;
+  --radius-btn: 8px;
+
+  /* Khoảng cách */
+  --gutter: 32px;           /* lề hai bên nội dung (máy tính) */
+  --gutter-mobile: 16px;
+  --content-max: 1280px;
+  --nav-max: 1248px;
+  --nav-top: 16px;
+  --nav-top-mobile: 12px;
+
+  /* Dấu đầu dòng: ngôi sao (Kỹ năng, Ngoại ngữ) và chấm tròn (còn lại) */
+  --star-size: 10px;
+  --dot-size: 6px;
+  --star-indent: 18px;
+  --star-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1.8l3.1 6.6 7.2.9-5.3 5 1.4 7.1L12 17.9l-6.4 3.5 1.4-7.1-5.3-5 7.2-.9z'/%3E%3C/svg%3E");
+
+  /* Hiệu ứng hover — chỉ cho ô / dòng / nút bấm được */
+  --ease: 0.18s ease-out;
+  --lift: -3px;
+  --lift-btn: -2px;
+  --shadow-lift: 0 12px 24px -16px rgba(42, 110, 71, 0.55);
+}

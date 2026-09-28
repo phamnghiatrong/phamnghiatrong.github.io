@@ -1,0 +1,315 @@
+---
+/**
+ * Chi tiết project: thông tin chung, ghi chú riêng (src/content/projects/<repo>.md, tùy chọn)
+ * và README lấy từ GitHub lúc build (ảnh/link tương đối đã đổi thành link tuyệt đối).
+ */
+import { render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import SocialIcon from '../../../components/profile/SocialIcon.astro';
+import { DEFAULT_LOCALE, LOCALES, localizePath, useT, type Locale } from '../../../i18n';
+import { formatPostDate } from '../../../lib/blog';
+import { pick } from '../../../lib/data';
+import { getProjects, type Project } from '../../../lib/projects';
+import '../../../styles/prose.css';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return LOCALES.flatMap((locale) =>
+    projects.map((project) => ({
+      params: { lang: locale === DEFAULT_LOCALE ? undefined : locale, slug: project.slug },
+      props: { locale, project },
+    })),
+  );
+}
+
+const { locale, project } = Astro.props as { locale: Locale; project: Project };
+const t = useT(locale);
+const pr = t.projects;
+const L = (value: Parameters<typeof pick>[0]) => pick(value, locale);
+const gh = project.github;
+
+const hasNotes = !!project.note?.body?.trim();
+const Notes = hasNotes ? (await render(project.note!)).Content : null;
+
+const facts = [
+  project.period && { label: pr.colWhen, value: project.period },
+  (gh?.language || project.stack.length > 0) && {
+    label: gh?.language ? pr.language : pr.stack,
+    value: gh?.language ?? project.stack.join(' · '),
+  },
+  gh && { label: pr.updatedLabel, value: formatPostDate(new Date(gh.updatedAt), locale) },
+].filter((f): f is { label: string; value: string } => !!f);
+---
+
+<Base locale={locale} title={L(project.title)} description={L(project.description) || undefined} current="projects">
+  <article class="project">
+    <header class="head">
+      {
+        project.status && (
+          <p class:list={['status', 'dot', `status-${project.status}`]}>
+            {t.profile.projectStatus[project.status]}
+          </p>
+        )
+      }
+      <h1 class="title">{L(project.title)}</h1>
+      {L(project.description) && <p class="desc">{L(project.description)}</p>}
+
+      {
+        facts.length > 0 && (
+          <dl class="facts">
+            {facts.map((f) => (
+              <div class="fact">
+                <dt>{f.label}</dt>
+                <dd>{f.value}</dd>
+              </div>
+            ))}
+          </dl>
+        )
+      }
+
+      {
+        gh && gh.topics.length > 0 && (
+          <p class="topics">
+            <span class="sr-only">{pr.topics}: </span>
+            {gh.topics.map((topic) => (
+              <span class="topic">#{topic}</span>
+            ))}
+          </p>
+        )
+      }
+
+      {
+        gh && (
+          <div class="actions">
+            <a class="btn" href={gh.htmlUrl} rel="noopener">
+              <SocialIcon network="github" />
+              <span>{pr.viewOnGithub}</span>
+            </a>
+            {gh.homepage && (
+              <a class="btn btn-ghost" href={gh.homepage} rel="noopener">
+                {pr.homepage} →
+              </a>
+            )}
+          </div>
+        )
+      }
+    </header>
+
+    {!gh && <p class="notice">{pr.planned}</p>}
+
+    {
+      Notes && (
+        <section class="block">
+          <h2 class="sec-h">{pr.notesTitle}</h2>
+          <div class="prose">
+            <Notes />
+          </div>
+        </section>
+      )
+    }
+
+    {
+      gh && (
+        <section class="block">
+          <h2 class="sec-h">{pr.readmeTitle}</h2>
+          {gh.readmeHtml ? (
+            <div class="prose readme" set:html={gh.readmeHtml} />
+          ) : (
+            <p class="muted">{pr.noReadme}</p>
+          )}
+        </section>
+      )
+    }
+
+    <a class="all" href={localizePath(locale, '/projects/')}>{pr.allProjects} →</a>
+  </article>
+</Base>
+
+<style>
+  .project {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    max-width: 52rem;
+  }
+  .head {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 16px;
+  }
+  /* Phần đầu nằm trực tiếp trên video nền → chữ sáng */
+  .status {
+    margin: 0;
+    font-size: 14px;
+    text-align: left;
+  }
+  .status.dot::before {
+    background: var(--brown-on-video);
+  }
+  .status-dang-lam,
+  .status-xong {
+    color: var(--ok-on-video);
+  }
+  .status-du-kien {
+    color: var(--plan-on-video);
+  }
+  .title {
+    font-size: 40px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--on-video);
+    text-shadow: var(--on-video-shadow);
+    text-align: justify;
+    text-wrap: wrap;
+  }
+  .desc {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--on-video-muted);
+    text-shadow: var(--on-video-shadow);
+  }
+
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 6px 0 0;
+  }
+  .fact {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 140px;
+    padding: 10px 14px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+    border-radius: var(--radius-row);
+  }
+  .fact dt {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .fact dd {
+    margin: 0;
+    font-size: 15px;
+    color: var(--ink);
+  }
+
+  .topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+  }
+  .topic {
+    padding: 4px 10px;
+    border-radius: 0;
+    background: var(--green-soft);
+    color: var(--green);
+    font-size: 13px;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 42px;
+    padding: 0 16px;
+    border: 1px solid var(--green);
+    border-radius: var(--radius-btn);
+    background: var(--green);
+    color: #fff;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background var(--ease), border-color var(--ease), transform var(--ease), box-shadow var(--ease);
+  }
+  .btn:hover {
+    color: #fff;
+    background: var(--green-hover);
+    border-color: var(--green-hover);
+    transform: translateY(var(--lift-btn));
+    box-shadow: var(--shadow-lift);
+  }
+  .btn-ghost {
+    background: var(--panel);
+    color: var(--green);
+  }
+  .btn-ghost:hover {
+    background: var(--panel);
+    color: var(--green);
+  }
+
+  .notice {
+    margin: 0;
+    padding: 12px 16px;
+    border-radius: var(--radius-btn);
+    background: rgba(232, 157, 88, 0.14);
+    border: 1px solid rgba(232, 157, 88, 0.35);
+    color: var(--brown);
+    font-size: 15px;
+  }
+
+  /* Ghi chú, README: chữ dài nên đặt trong ô kính mờ */
+  .block {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 20px 24px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+    border-radius: var(--radius-panel);
+  }
+  .muted {
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .all {
+    align-self: flex-start;
+    font-size: 14px;
+    color: var(--on-video);
+    text-shadow: var(--on-video-shadow);
+    text-decoration: none;
+  }
+  .all:hover {
+    color: var(--on-video);
+    text-shadow: var(--on-video-shadow);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 1023.98px) {
+    .project {
+      gap: 24px;
+    }
+    .head {
+      padding-top: 0;
+    }
+    .title {
+      font-size: 28px;
+    }
+    .desc {
+      font-size: 16px;
+    }
+    .fact {
+      min-width: 0;
+      flex: 1 1 140px;
+    }
+    .block {
+      padding: 16px 12px;
+    }
+  }
+</style>

@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Blog</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&amp;family=Noto+Sans+TC:wght@400&amp;display=swap">
+<style>
+body{margin:0;font-family:"Roboto","Noto Sans TC",system-ui,sans-serif;color:#1E2420;background:#FAF8F4}
+a{color:#2A6E47}a:hover{color:#368A58}
+h1,h2,h3{font-weight:400;font-family:"Roboto","Noto Sans TC",sans-serif;margin:0;text-wrap:balance}
+.chip{height:40px;padding:0 16px;border-radius:999px;border:1.5px solid #D9D2C5;background:#FFFFFF;color:#3C4740;font:400 14px "Roboto",sans-serif;cursor:pointer;transition:background .18s ease-out,border-color .18s ease-out,color .18s ease-out,transform .18s ease-out,box-shadow .18s ease-out}
+.chip:hover{border-color:#368A58;color:#2A6E47;background:#F3F8F4;transform:translateY(-2px);box-shadow:0 12px 24px -16px rgba(42,110,71,.55)}
+.chip.on{background:#2A6E47;border-color:#2A6E47;color:#FFFFFF}
+.row{display:grid;grid-template-columns:130px minmax(0,1fr) 150px 110px;gap:24px;align-items:center;padding:18px 20px;border-radius:10px;text-decoration:none;color:#1E2420;transition:transform .18s ease-out,box-shadow .18s ease-out,background .18s ease-out;position:relative}
+.row:hover{background:#FFFFFF;color:#1E2420;transform:translateY(-3px);box-shadow:0 0 0 1px #368A58,0 12px 24px -16px rgba(42,110,71,.55);z-index:1}
+.row:hover .ttl{color:#2A6E47}
+.search{height:44px;width:300px;box-sizing:border-box;padding:0 14px;border:1.5px solid #D9D2C5;border-radius:10px;background:#FFFFFF;font:400 15px "Roboto",sans-serif;color:#1E2420}
+.search:focus{outline:none;border-color:#368A58}
+.lift{transition:transform .18s ease-out,box-shadow .18s ease-out,border-color .18s ease-out;position:relative}
+.lift:hover{transform:translateY(-3px);box-shadow:0 12px 24px -16px rgba(42,110,71,.55);border-color:#368A58;background-color:#FFFFFF;z-index:1}
+main{text-align:justify;text-justify:inter-word}
+main h1,main h2,main h3{text-align:left}
+.tile{display:flex;align-items:center;gap:12px;width:100%;box-sizing:border-box;height:48px;padding:0 14px;border:1px solid rgba(255,255,255,.18);border-radius:12px;background:transparent;color:#DCEBE0;text-decoration:none;font:400 15px "Roboto","Noto Sans TC",sans-serif;white-space:nowrap;overflow:hidden;cursor:pointer;transition:background .18s ease-out,border-color .18s ease-out,color .18s ease-out}
+.tile:hover{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.34);color:#FFFFFF}
+.tile.on{background:#E4F0E7;border-color:#E4F0E7;color:#2A6E47;box-shadow:inset 3px 0 0 #7A4B28}
+.tile.static{cursor:default}
+.tile.static:hover{background:transparent;border-color:rgba(255,255,255,.18);color:#DCEBE0}
+.lang{flex:1;min-width:52px;height:34px;padding:0 8px;border-radius:8px;border:1px solid rgba(255,255,255,.22);background:transparent;color:#DCEBE0;font:400 13px "Roboto","Noto Sans TC",sans-serif;cursor:pointer;transition:background .18s ease-out}
+.lang:hover{background:rgba(255,255,255,.12)}
+.lang.on{background:#FAF8F4;color:#2A6E47;border-color:#FAF8F4}
+:focus-visible{outline:2px solid #7A4B28;outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1480px; display: flex; flex-direction: column; background: #FAF8F4; overflow: hidden">
+
+<header style="width: calc(100% - 32px); max-width: 1248px; box-sizing: border-box; margin: 16px auto 0; background: #2A6E47; border-radius: 20px; padding: 10px; display: flex; align-items: center; justify-content: space-between; gap: 16px">
+  <nav aria-label="Menu chính" style="display: flex; gap: 8px">
+    <a class="tile" href="Main.dc.html" style="width: auto; padding: 0 18px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path><path d="M9.5 21v-6h5v6"></path></svg><span>Hồ sơ</span></a>
+    <a class="tile" href="Main.dc.html" style="width: auto; padding: 0 18px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0" aria-hidden="true"><circle cx="6" cy="6" r="2.5"></circle><circle cx="6" cy="18" r="2.5"></circle><circle cx="18" cy="8" r="2.5"></circle><path d="M6 8.5v7"></path><path d="M18 10.5c0 4-5 4-10 6"></path></svg><span>Project</span></a>
+    <a class="tile on" href="Blog.dc.html" aria-current="page" style="width: auto; padding: 0 18px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0" aria-hidden="true"><path d="M2 5h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"></path><path d="M22 5h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"></path></svg><span>Blog</span></a>
+  </nav>
+  <div class="tile static" style="width: auto; gap: 6px; padding: 0 7px">
+    <button class="lang on" type="button">VI</button>
+    <button class="lang" type="button">EN</button>
+    <button class="lang" type="button">繁中</button>
+  </div>
+</header>
+
+<main style="flex-grow: 1; min-width: 0; width: 100%; max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; padding: 56px 80px 40px; box-sizing: border-box; gap: 32px">
+  <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 24px">
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <span style="font: 400 14px Roboto, sans-serif; color: #4E2C15">~/blog</span>
+      <h1 style="font-size: 48px; font-weight: 400; color: #2A6E47; letter-spacing: -0.02em">Blog</h1>
+      <p style="margin: 0; color: #5E6B62; font-size: 17px; max-width: 38em">Bài lab, tự động hóa, tối ưu mạng bằng code, ngoại ngữ và hành trình tự học. Blog ra 2 tuần một bài.</p>
+    </div>
+    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #5E6B62" for="blog-search">Tìm bài
+      <input id="blog-search" class="search" type="search" placeholder="VLAN, OSPF, Netmiko…">
+    </label>
+  </div>
+
+  <div style="display: flex; gap: 10px; flex-wrap: wrap" role="group" aria-label="Lọc theo trụ cột">
+    <sc-for list="{{chips}}" as="c" hint-placeholder-count="6">
+      <button class="{{c.cls}}" type="button" onClick="{{c.pick}}" aria-pressed="{{c.pressed}}">{{c.label}} <span style="opacity: .7; font-weight: 400">{{c.count}}</span></button>
+    </sc-for>
+  </div>
+
+  <div style="display: flex; flex-direction: column">
+    <div style="display: grid; grid-template-columns: 130px minmax(0,1fr) 150px 110px; gap: 24px; padding: 0 20px 10px; font: 400 11px Roboto, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #5E6B62; border-bottom: 1px solid #E2DDD3">
+      <span>Dự kiến</span><span>Tiêu đề</span><span>Trụ cột</span><span style="text-align: right">Lượt xem</span>
+    </div>
+    <sc-for list="{{rows}}" as="r" hint-placeholder-count="12">
+      <a class="row" href="Blog.dc.html">
+        <span style="font: 400 13px Roboto, sans-serif; color: #5E6B62">{{r.when}}</span>
+        <span style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+          <span class="ttl" style="font: 400 17px Roboto, 'Noto Sans TC', sans-serif; line-height: 1.35">{{r.title}}</span>
+          <span style="font-size: 13px; color: #5E6B62">{{r.ch}}</span>
+        </span>
+        <span><span style="padding: 4px 10px; border-radius: 0; background: {{r.bg}}; color: {{r.fg}}; font-size: 13px; font-weight: 400">{{r.tag}}</span></span>
+        <span style="font: 400 13px Roboto, sans-serif; color: #5E6B62; text-align: right">[—]</span>
+      </a>
+    </sc-for>
+  </div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1480}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { tag: 'all', collapsed: false };
+  }
+  renderVals() {
+    var self = this;
+    var TAGS = {
+      lab: { label: 'Lab thực hành', bg: '#E4F0E7', fg: '#2A6E47' },
+      automation: { label: 'Tự động hóa', bg: '#E4F0E7', fg: '#2A6E47' },
+      optimization: { label: 'Tối ưu mạng', bg: '#E4F0E7', fg: '#2A6E47' },
+      language: { label: 'Ngoại ngữ', bg: '#E4F0E7', fg: '#2A6E47' },
+      journey: { label: 'Hành trình', bg: '#E4F0E7', fg: '#2A6E47' }
+    };
+    var posts = [
+      ['T1 · 10/2026', 'Mình là ai và vì sao bắt đầu học công khai: mạng + Anh + Trung trong 12 tháng', 'journey', 'LinkedIn'],
+      ['T1 · 10/2026', 'Dựng lab VLAN + Inter-VLAN routing từ con số 0', 'lab', 'Blog + GitHub'],
+      ['T2 · 10/2026', '3 lỗi subnet mà sinh viên hay sai', 'lab', 'TikTok / Facebook'],
+      ['T2 · 10/2026', 'Script Python backup cấu hình 10 thiết bị trong 30 giây (Netmiko)', 'automation', 'GitHub + Blog'],
+      ['T3 · 10/2026', '20 thuật ngữ mạng tiếng Anh phát âm sai nhiều nhất', 'language', 'TikTok'],
+      ['T3 · 10/2026', 'OSPF single-area: lab + giải thích DR/BDR', 'lab', 'Blog, YouTube'],
+      ['T4 · 10/2026', 'Tìm đường đi ngắn nhất và đường dự phòng với NetworkX', 'optimization', 'Blog + GitHub'],
+      ['T4 · 10/2026', '路由器, 交換機… 15 từ tiếng Trung đầu tiên của dân mạng', 'language', 'TikTok / Facebook'],
+      ['T5 · 11/2026', 'Review: tài liệu CCNA miễn phí nào đáng dùng', 'journey', 'LinkedIn + Facebook'],
+      ['T5 · 11/2026', 'Tự động kiểm tra cấu hình sai chuẩn bằng Python', 'automation', 'GitHub + LinkedIn'],
+      ['T6 · 11/2026', 'Phân bổ băng thông tối ưu bằng PuLP: ví dụ mạng 6 nút', 'optimization', 'Blog + LinkedIn'],
+      ['T6 · 11/2026', 'Tổng kết tháng đầu: số liệu, điều làm được, điều sai', 'journey', 'LinkedIn']
+    ];
+    var tag = this.state.tag;
+    var rows = posts.filter(function (p) { return tag === 'all' || p[2] === tag; }).map(function (p) {
+      var m = TAGS[p[2]];
+      return { when: p[0], title: p[1], tag: m.label, bg: m.bg, fg: m.fg, ch: 'Kênh gốc: ' + p[3] };
+    });
+    var keys = ['all', 'lab', 'automation', 'optimization', 'language', 'journey'];
+    var chips = keys.map(function (k) {
+      var n = k === 'all' ? posts.length : posts.filter(function (p) { return p[2] === k; }).length;
+      return {
+        label: k === 'all' ? 'Tất cả' : TAGS[k].label, count: String(n),
+        cls: tag === k ? 'chip on' : 'chip', pressed: tag === k ? 'true' : 'false',
+        pick: function () { self.setState({ tag: k }); }
+      };
+    });
+    var collapsed = this.state.collapsed;
+    return {
+      rows: rows, chips: chips,
+      collapsed: collapsed, expanded: !collapsed, expandedStr: collapsed ? 'false' : 'true',
+      sideW: collapsed ? '88px' : '276px', tilePad: collapsed ? '0' : '0 14px', tileJustify: collapsed ? 'center' : 'flex-start',
+      toggleJustify: collapsed ? 'center' : 'flex-start',
+      toggleLabel: collapsed ? 'Mở rộng menu' : 'Thu gọn menu',
+      toggle: function () { self.setState({ collapsed: !collapsed }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

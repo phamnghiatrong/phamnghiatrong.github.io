@@ -1,0 +1,24 @@
+{
+  "schools": [
+    {
+      "school": {
+        "vi": "Cao đẳng Công nghệ Thủ Đức",
+        "en": "Thu Duc College of Technology",
+        "zh-hant": "守德科技專科學校"
+      },
+      "start": "2025",
+      "end": "2028",
+      "endExpected": true,
+      "major": {
+        "vi": "Ngành Truyền thông & Mạng máy tính",
+        "en": "Communications and Computer Networks",
+        "zh-hant": "通訊與電腦網路"
+      },
+      "courses": {
+        "vi": "Môn học kỳ này: Quản trị hạ tầng mạng nâng cao, Quản trị Linux, Quản trị Windows, Mạng cáp quang và ứng dụng.",
+        "en": "This term: Advanced Network Infrastructure, Linux Administration, Windows Administration, Optical Fiber Networks.",
+        "zh-hant": "本學期課程：進階網路基礎架構管理、Linux 系統管理、Windows 系統管理、光纖網路與應用。"
+      }
+    }
+  ]
+}

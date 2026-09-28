@@ -1,0 +1,153 @@
+/*
+ * Kiểu chữ cho nội dung dài sinh ra từ Markdown: bài blog, README của project.
+ * Bọc nội dung trong <div class="prose">.
+ */
+.prose {
+  min-width: 0;
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--ink);
+}
+.prose > :first-child {
+  margin-top: 0;
+}
+.prose p,
+.prose ul,
+.prose ol,
+.prose blockquote,
+.prose pre,
+.prose table,
+.prose figure {
+  margin: 0 0 1.2em;
+}
+.prose h1 {
+  margin: 0 0 0.6em;
+  font-size: 30px;
+  line-height: 1.25;
+  text-align: justify;
+}
+.prose h2 {
+  margin: 2em 0 0.6em;
+  font-size: 26px;
+  line-height: 1.3;
+  color: var(--accent);
+  text-align: justify;
+}
+.prose h3 {
+  margin: 1.6em 0 0.5em;
+  font-size: 20px;
+  line-height: 1.35;
+  text-align: justify;
+}
+.prose h4 {
+  margin: 1.4em 0 0.4em;
+  font-size: 17px;
+  color: var(--brown);
+}
+.prose a {
+  color: var(--accent);
+  text-underline-offset: 3px;
+}
+.prose a:hover {
+  color: var(--accent-hover);
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.4em;
+}
+.prose li {
+  margin: 0.3em 0;
+}
+.prose li::marker {
+  color: var(--marker);
+}
+.prose blockquote {
+  padding: 2px 0 2px 18px;
+  border-left: 3px solid var(--marker);
+  border-radius: 0;
+  color: var(--muted);
+}
+.prose hr {
+  margin: 2.4em 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+.prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.4em auto;
+  border-radius: var(--radius-row);
+  border: 1px solid var(--line);
+}
+/* Code */
+.prose code {
+  font-family: ui-monospace, 'Cascadia Mono', Consolas, 'SF Mono', Menlo, monospace;
+  font-size: 0.88em;
+}
+.prose :not(pre) > code {
+  padding: 0.12em 0.4em;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.prose pre {
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-row);
+  overflow-x: auto;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: left;
+}
+.prose pre code {
+  font-size: inherit;
+}
+/* Bảng: cuộn ngang trên màn hình hẹp thay vì làm tràn trang */
+.prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 15px;
+  text-align: left;
+}
+.prose th,
+.prose td {
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  vertical-align: top;
+}
+.prose th {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+/* README từ GitHub: bỏ biểu tượng neo cạnh tiêu đề (chỉ dùng được trên github.com) */
+.prose .anchor,
+.prose .octicon {
+  display: none;
+}
+.prose .highlight {
+  margin: 0 0 1.2em;
+}
+.prose .highlight pre {
+  margin: 0;
+}
+
+@media (max-width: 1023.98px) {
+  .prose h1 {
+    font-size: 24px;
+  }
+  .prose {
+    font-size: 16px;
+    line-height: 1.75;
+  }
+  .prose h2 {
+    font-size: 22px;
+  }
+  .prose h3 {
+    font-size: 18px;
+  }
+}

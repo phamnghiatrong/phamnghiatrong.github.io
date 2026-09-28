@@ -1,0 +1,803 @@
+---
+/**
+ * Trang Hồ sơ (CV) — trang chủ.
+ * Mọi nội dung đọc từ src/data/*.json, src/content/projects/*.md (kèm dữ liệu GitHub) và blog; trang này chỉ lo bố cục.
+ *
+ * Máy tính (≥ 1024px): cột trái là khung trắng (ảnh, thông tin, mạng xã hội, kỹ năng...),
+ * cột phải là các mục CV.
+ * Điện thoại: hai cột "tan" ra (display: contents) và các mục xếp lại theo thứ tự `order`.
+ */
+import Base from '../../layouts/Base.astro';
+import Avatar from '../../components/profile/Avatar.astro';
+import SocialIcon, { type Network } from '../../components/profile/SocialIcon.astro';
+import ViewCount from '../../components/ViewCount.astro';
+import { HTML_LANG, localeFromParam, localeStaticPaths, localizePath, useT } from '../../i18n';
+import { formatPostDate, getPosts } from '../../lib/blog';
+import { getProjects } from '../../lib/projects';
+import {
+  career,
+  education,
+  formatBirthDate,
+  formatPhone,
+  goals,
+  isShown,
+  phoneHref,
+  pick,
+  profile,
+  skills,
+} from '../../lib/data';
+
+export const getStaticPaths = localeStaticPaths;
+
+const locale = localeFromParam(Astro.params.lang);
+const t = useT(locale);
+const p = t.profile;
+const L = (value: Parameters<typeof pick>[0]) => pick(value, locale);
+const fill = (template: string, values: Record<string, string>) =>
+  template.replace(/\{(\w+)\}/g, (_, key) => values[key] ?? '');
+
+// Thông tin liên hệ
+const contact = [
+  isShown(profile.birthDate) && { label: p.birthDate, value: formatBirthDate(profile.birthDate, locale) },
+  isShown(profile.phone) && { label: p.phone, value: formatPhone(profile.phone, locale), href: phoneHref(profile.phone) },
+  isShown(profile.email) && { label: p.email, value: profile.email, href: `mailto:${profile.email}`, isEmail: true },
+  isShown(L(profile.area)) && { label: p.area, value: L(profile.area) },
+].filter((row): row is { label: string; value: string; href?: string; isEmail?: boolean } => !!row);
+
+// Mạng xã hội
+const NETWORK_NAMES: Record<Network, string> = {
+  github: 'GitHub',
+  linkedin: 'LinkedIn',
+  youtube: 'YouTube',
+  tiktok: 'TikTok',
+  instagram: 'Instagram',
+  facebook: 'Facebook',
+};
+const socials = (Object.keys(NETWORK_NAMES) as Network[])
+  .filter((key) => isShown(profile.social[key]))
+  .map((key) => ({ key, name: NETWORK_NAMES[key], href: profile.social[key] }));
+
+// Project nổi bật
+const projects = (await getProjects()).filter((project) => project.featured);
+const STATUS_COLOR = { 'dang-lam': 'var(--ok)', 'du-kien': 'var(--plan)', xong: 'var(--ok)' } as const;
+const GOAL_COLOR = { 'dang-on': 'var(--ok)', dat: 'var(--ok)', 'ke-hoach': 'var(--plan)' } as const;
+
+// Dữ liệu có cấu trúc cho Google: thông tin cá nhân (schema.org/Person) + website
+const homeUrl = new URL(localizePath(locale, '/'), Astro.site).href;
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: profile.name,
+    url: homeUrl,
+    description: t.site.description,
+    ...(isShown(profile.email) && { email: `mailto:${profile.email}` }),
+    ...(isShown(L(profile.area)) && { address: { '@type': 'PostalAddress', addressLocality: L(profile.area) } }),
+    alumniOf: education.map((e) => ({ '@type': 'CollegeOrUniversity', name: L(e.school) })),
+    knowsAbout: skills.groups.slice(0, 5).flatMap((g) => g.items.map(L)),
+    knowsLanguage: ['vi', 'en', 'zh'],
+    sameAs: socials.map((s) => s.href),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: profile.name,
+    url: homeUrl,
+    inLanguage: HTML_LANG[locale],
+  },
+];
+
+// Bài viết mới: 3 bài gần nhất
+const posts = (await getPosts(locale)).slice(0, 3).map((post) => ({
+  href: post.href,
+  statsPath: `/blog/${post.slug}/`,
+  date: formatPostDate(post.entry.data.date, locale),
+  iso: post.entry.data.date.toISOString().slice(0, 10),
+  title: post.entry.data.title,
+  lang: post.translated ? undefined : 'vi',
+  meta: [...post.entry.data.tags.map((tag) => t.blog.tags[tag]), !post.translated && t.blog.viOnlyBadge]
+    .filter(Boolean)
+    .join(' · '),
+}));
+---
+
+<Base locale={locale} current="profile" jsonLd={jsonLd}>
+  <div class="cv">
+    <div class="cv-side">
+      <section class="identity" style="order: 1">
+        <Avatar alt={fill(p.photoAlt, { name: profile.name })} placeholder={p.photoPlaceholder} />
+        <div class="identity-text">
+          <h1 class="name">{profile.name}</h1>
+          <p class="role">{L(profile.role)}</p>
+        </div>
+      </section>
+
+      {
+        contact.length > 0 && (
+          <section class="block" style="order: 2">
+            <h2 class="sec-h">{p.contactTitle}</h2>
+            {contact.map((row) => {
+              const Row = row.href ? 'a' : 'div';
+              return (
+                <Row class:list={['kv', 'kv-contact', { 'kv-link': row.href }]} href={row.href}>
+                  <span class="kv-k dot">{row.label}</span>
+                  <span class:list={['kv-v', { 'kv-email': row.isEmail }]}>
+                    {row.isEmail ? (
+                      <>
+                        {row.value.split('@')[0]}
+                        <wbr />@{row.value.split('@')[1]}
+                      </>
+                    ) : (
+                      row.value
+                    )}
+                  </span>
+                </Row>
+              );
+            })}
+          </section>
+        )
+      }
+
+      {
+        socials.length > 0 && (
+          <section class="block block-social" style="order: 3">
+            <h2 class="sec-h">{p.socialTitle}</h2>
+            <div class="social-grid">
+              {socials.map((s) => (
+                <a
+                  class="soc-btn"
+                  href={s.href}
+                  rel="me noopener"
+                  aria-label={fill(p.socialLabel, { network: s.name, name: profile.name })}
+                >
+                  <SocialIcon network={s.key} />
+                  <span>{s.name}</span>
+                </a>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      <section class="block" style="order: 8">
+        <h2 class="sec-h">{p.skillsTitle}</h2>
+        {
+          skills.groups.map((g) => (
+            <div class="kv kv-stack">
+              <span class="kv-k star">{L(g.name)}</span>
+              <span class="kv-v">{g.items.map(L).join(', ')}</span>
+            </div>
+          ))
+        }
+      </section>
+
+      <section class="block" style="order: 9">
+        <h2 class="sec-h">{p.softTitle}</h2>
+        {
+          skills.soft.map((s) => (
+            <div class="kv">
+              <span class="kv-v kv-left star">{L(s)}</span>
+            </div>
+          ))
+        }
+      </section>
+
+      <section class="block" style="order: 10">
+        <h2 class="sec-h">{p.languagesTitle}</h2>
+        {
+          skills.languages.map((lg) => (
+            <div class="kv">
+              <span class="kv-v kv-left star" lang={L(lg.name) === '中文' ? 'zh-Hant' : undefined}>{L(lg.name)}</span>
+              <span class="kv-k kv-right">{L(lg.level)}</span>
+            </div>
+          ))
+        }
+      </section>
+    </div>
+
+    <div class="cv-main">
+      <section class="block" style="order: 4">
+        <h2 class="sec-h">{p.aboutTitle}</h2>
+        <p class="summary">{L(profile.summary)}</p>
+      </section>
+
+      <section class="block" style="order: 5">
+        <h2 class="sec-h">{p.careerTitle}</h2>
+        {
+          career.stages.map((c) => (
+            <div class="cv-row">
+              <p class="cv-when dot">
+                <span>{L(c.term)}</span>
+                <span class="when-sep"> · </span>
+                <span class="when-sub">{L(c.when)}</span>
+              </p>
+              <div class="cv-body">
+                <h3 class="cv-title">{L(c.role)}</h3>
+                {isShown(L(c.description)) && <p class="cv-text">{L(c.description)}</p>}
+              </div>
+            </div>
+          ))
+        }
+        <div class="career-facts">
+          <div class="kv kv-box">
+            <span class="kv-k dot">{p.desiredPosition}</span>
+            <span class="kv-v">{L(career.desiredPosition)}</span>
+          </div>
+          <div class="kv kv-box">
+            <span class="kv-k dot">{p.availableFrom}</span>
+            <span class="kv-v">{career.availableFrom}</span>
+          </div>
+        </div>
+      </section>
+
+      {
+        projects.length > 0 && (
+          <section class="block" style="order: 6">
+            <h2 class="sec-h">{p.projectsTitle}</h2>
+            {projects.map((project) => (
+              <a class="cv-row lift" href={localizePath(locale, `/projects/${project.slug}/`)}>
+                <p class="cv-when dot">
+                  <span>{project.period}</span>
+                  {project.status && (
+                    <>
+                      <span class="when-sep"> · </span>
+                      <span class="when-sub" style={`color: ${STATUS_COLOR[project.status]}`}>
+                        {p.projectStatus[project.status]}
+                      </span>
+                    </>
+                  )}
+                </p>
+                <div class="cv-body">
+                  <h3 class="cv-title">{L(project.title)}</h3>
+                  <p class="cv-text">{L(project.description)}</p>
+                  {project.stack.length > 0 && <p class="cv-meta">{project.stack.join(' · ')}</p>}
+                  {project.github && (
+                    <p class="cv-meta cv-repo">{project.github.htmlUrl.replace('https://', '')}</p>
+                  )}
+                </div>
+              </a>
+            ))}
+          </section>
+        )
+      }
+
+      <section class="block" style="order: 7">
+        <h2 class="sec-h">{p.educationTitle}</h2>
+        {
+          education.map((e) => (
+            <div class="cv-row">
+              <p class="cv-when dot">
+                <span>
+                  {e.start} – {e.end}
+                </span>
+                {e.endExpected && (
+                  <>
+                    <span class="when-sep"> · </span>
+                    <span class="when-sub">{p.expectedGraduation}</span>
+                  </>
+                )}
+              </p>
+              <div class="cv-body">
+                <h3 class="cv-title">{L(e.school)}</h3>
+                {isShown(L(e.major)) && <p class="cv-sub">{L(e.major)}</p>}
+                {isShown(L(e.courses)) && <p class="cv-text">{L(e.courses)}</p>}
+              </div>
+            </div>
+          ))
+        }
+      </section>
+
+      <section class="block" style="order: 11">
+        <h2 class="sec-h">{p.goalsTitle}</h2>
+        {
+          goals.map((g) => (
+            <div class="goal-row">
+              <span class="goal-month dot dot-desktop">{g.month}</span>
+              <span class="goal-name dot dot-mobile">{L(g.name)}</span>
+              <span class="goal-status" style={`color: ${GOAL_COLOR[g.status]}`}>
+                {L(g.label) || p.goalStatus[g.status]}
+              </span>
+            </div>
+          ))
+        }
+      </section>
+
+      <section class="block" style="order: 12">
+        <div class="sec-h sec-h-row">
+          <h2>{p.postsTitle}</h2>
+          <a class="more" href={localizePath(locale, '/blog/')}>{p.seeAll}</a>
+        </div>
+        {
+          posts.length > 0 ? (
+            posts.map((post) => (
+              <a class="cv-row lift" href={post.href}>
+                <p class="cv-when dot">
+                  <time datetime={post.iso}>{post.date}</time>
+                </p>
+                <div class="cv-body">
+                  <h3 class="cv-title" lang={post.lang}>
+                    {post.title}
+                  </h3>
+                  <p class="cv-meta">
+                    {post.meta}
+                    <ViewCount path={post.statsPath} template={` · ${t.blog.views}`} />
+                  </p>
+                </div>
+              </a>
+            ))
+          ) : (
+            <p class="empty">{p.noPosts}</p>
+          )
+        }
+      </section>
+    </div>
+  </div>
+</Base>
+
+<style>
+  /* ---------- Bố cục máy tính ---------- */
+  .cv {
+    display: grid;
+    grid-template-columns: 340px minmax(0, 1fr);
+    gap: 56px;
+    align-items: start;
+  }
+
+  .cv-side {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .cv-main {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+  }
+
+  /* Mỗi mục lớn là một ô kính mờ, bo 16px */
+  .block,
+  .identity {
+    padding: 20px 24px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+    border-radius: var(--radius-panel);
+  }
+  .block {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+  /* Dòng cuối trong ô không cần đường kẻ dưới */
+  .block > .cv-row:last-child,
+  .block > .kv:last-child,
+  .block > .goal-row:last-child {
+    border-bottom-color: transparent;
+  }
+  .block-social {
+    gap: 12px;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  /* Ảnh, tên, vai trò */
+  .identity {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .identity-text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  /* Tên in hoa: 28px để vừa một dòng trong khung trái (290px) */
+  .name {
+    font-size: 28px;
+    line-height: 1.2;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--ink);
+  }
+  .role {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--accent);
+  }
+
+  /* Dòng nhãn — giá trị */
+  .kv {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding: 10px 12px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-btn);
+  }
+  .kv-k {
+    font-size: 13px;
+    color: var(--muted);
+    white-space: nowrap;
+    text-align: left;
+  }
+  .kv-v {
+    min-width: 0;
+    font-size: 15px;
+    color: var(--ink);
+    text-align: justify;
+    text-align-last: right;
+    overflow-wrap: anywhere;
+  }
+  /* Điện thoại, email: cả dòng là link (mở ứng dụng gọi / gửi thư) nhưng không chuyển trang
+     nên không nổi lên và không đổi màu — giữ cùng màu với các giá trị khác trong ô */
+  .kv-link,
+  .kv-link:hover {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  /* Ô Thông tin: cả 4 dòng một hàng (nhãn trái, giá trị phải), giá trị 14px và khoảng đệm hẹp
+     để email vừa một dòng; nếu sau này email dài hơn thì xuống dòng ở dấu @ */
+  .kv.kv-contact {
+    gap: 10px;
+    padding: 10px 6px;
+  }
+  .kv-contact .kv-v {
+    font-size: 14px;
+  }
+  .kv-email {
+    overflow-wrap: normal;
+  }
+  .kv-left {
+    text-align: justify;
+    text-align-last: left;
+  }
+  .kv-right {
+    text-align: justify;
+    text-align-last: right;
+    white-space: normal;
+  }
+  .kv-stack {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+  }
+  .kv-stack .kv-v {
+    padding-left: var(--star-indent);
+    text-align: justify;
+    text-align-last: left;
+  }
+
+  /* Nút mạng xã hội */
+  .social-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .soc-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 42px;
+    padding: 0 14px;
+    border: 1px solid var(--green);
+    border-radius: var(--radius-btn);
+    background: var(--green);
+    color: #fff;
+    font-size: 14px;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: background var(--ease), transform var(--ease), box-shadow var(--ease), border-color var(--ease);
+  }
+  .soc-btn :global(svg) {
+    flex-shrink: 0;
+  }
+  .soc-btn:hover {
+    color: #fff;
+    background: var(--green-hover);
+    border-color: var(--green-hover);
+    transform: translateY(var(--lift));
+    box-shadow: var(--shadow-lift);
+  }
+
+  /* Giới thiệu */
+  .summary {
+    margin-top: 10px;
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--ink);
+  }
+
+  /* Dòng CV: cột mốc | nội dung */
+  .cv-row {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+    padding: 16px 18px;
+    border: 1px solid transparent;
+    border-bottom-color: var(--line-soft);
+    border-radius: var(--radius-row);
+    color: var(--ink);
+    text-decoration: none;
+  }
+  a.cv-row:hover {
+    color: var(--ink);
+  }
+  .cv-when {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--brown);
+    text-align: left;
+  }
+  .cv-when > span {
+    display: block;
+  }
+  .cv-when .when-sep {
+    display: none;
+  }
+  .when-sub {
+    color: var(--muted);
+  }
+  .cv-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+  .cv-title {
+    font-size: 17px;
+    line-height: 1.4;
+    color: var(--ink);
+    text-align: justify;
+    text-wrap: wrap;
+  }
+  .cv-sub {
+    font-size: 15px;
+    color: var(--ink-soft);
+  }
+  .cv-text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+  .cv-meta {
+    margin-top: 2px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .cv-meta + .cv-repo {
+    margin-top: -2px;
+  }
+  /* Đường dẫn repo không ngắt ở dấu "-"; chỉ ngắt khi thật sự quá dài */
+  .cv-repo {
+    text-align: left;
+    overflow-wrap: anywhere;
+    hyphens: none;
+  }
+
+  /* Vị trí mong muốn / Có thể bắt đầu */
+  .career-facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .kv-box {
+    border-color: var(--line);
+    border-radius: var(--radius-row);
+    background: var(--glass-inner);
+  }
+
+  /* Chứng chỉ: tháng | tên ··· trạng thái */
+  .goal-row {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr) auto;
+    grid-template-areas: 'month name status';
+    column-gap: 28px;
+    align-items: baseline;
+    padding: 16px 18px;
+    border: 1px solid transparent;
+    border-bottom-color: var(--line-soft);
+    border-radius: var(--radius-row);
+  }
+  .goal-month {
+    grid-area: month;
+    font-size: 14px;
+    color: var(--brown);
+  }
+  .goal-name {
+    grid-area: name;
+    font-size: 16px;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+  /* Dấu chấm đứng ở cột đầu tiên: tháng (máy tính), tên (điện thoại) */
+  .dot-mobile {
+    padding-left: 0;
+  }
+  .dot-mobile::before {
+    display: none;
+  }
+  .goal-status {
+    grid-area: status;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  /* Bài viết mới */
+  .sec-h-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+  }
+  .sec-h-row h2 {
+    font-size: inherit;
+    letter-spacing: inherit;
+  }
+  .more {
+    font-size: 14px;
+    letter-spacing: 0;
+    text-transform: none;
+    text-decoration: none;
+    color: var(--accent);
+  }
+  .more:hover {
+    color: var(--brown);
+  }
+  .empty {
+    padding: 16px 18px;
+    font-size: 15px;
+    color: var(--muted);
+  }
+
+  /* ---------- Điện thoại (< 1024px) ---------- */
+  @media (max-width: 1023.98px) {
+    .cv {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 16px;
+    }
+    .block,
+    .identity {
+      padding: 16px 12px;
+    }
+    .identity {
+      padding: 20px 12px;
+    }
+    .kv.kv-contact {
+      gap: 8px;
+    }
+    .cv-side,
+    .cv-main {
+      display: contents;
+    }
+
+    .identity {
+      align-items: center;
+      gap: 12px;
+      text-align: center;
+    }
+    .identity-text {
+      align-items: center;
+    }
+    .name {
+      text-align: center;
+    }
+    .role {
+      text-align: center;
+    }
+
+    .block-social {
+      gap: 4px;
+    }
+    .social-grid {
+      margin-top: 8px;
+    }
+    .soc-btn {
+      padding: 0 12px;
+      font-size: 13px;
+    }
+
+    .kv {
+      gap: 12px;
+      padding: 10px;
+      border-bottom-color: var(--line-soft);
+    }
+    .kv-stack {
+      gap: 2px;
+    }
+
+
+    .summary {
+      margin-top: 6px;
+      font-size: 15.5px;
+      line-height: 1.7;
+    }
+
+    .cv-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 12px 10px;
+      border-radius: var(--radius-btn);
+    }
+    .cv-when {
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .cv-when > span,
+    .cv-when .when-sep {
+      display: inline;
+    }
+    .when-sub {
+      color: inherit;
+    }
+    .cv-title {
+      font-size: 16px;
+    }
+    .cv-sub,
+    .cv-text {
+      font-size: 14.5px;
+    }
+    .cv-meta {
+      font-size: 12.5px;
+    }
+
+    .career-facts {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 4px;
+      margin-top: 0;
+    }
+    .kv-box {
+      border-color: transparent;
+      border-bottom-color: var(--line-soft);
+      border-radius: var(--radius-btn);
+      background: transparent;
+    }
+
+    .goal-row {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas:
+        'name status'
+        'month status';
+      column-gap: 12px;
+      row-gap: 2px;
+      align-items: center;
+      padding: 10px;
+      border-radius: var(--radius-btn);
+    }
+    .goal-name {
+      font-size: 15px;
+    }
+    .goal-month {
+      font-size: 13px;
+      color: var(--muted);
+      padding-left: var(--star-indent);
+    }
+    .dot-desktop::before {
+      display: none;
+    }
+    .dot-mobile {
+      padding-left: var(--star-indent);
+    }
+    .dot-mobile::before {
+      display: block;
+    }
+
+    .empty {
+      padding: 12px 10px;
+    }
+  }
+</style>

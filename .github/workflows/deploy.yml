@@ -1,0 +1,60 @@
+# Tự build và đưa website lên GitHub Pages.
+# Chạy khi: đẩy code lên nhánh main (vd. sửa bài trên GitHub rồi Commit), mỗi ngày 1 lần
+# (cập nhật project từ GitHub), hoặc bấm tay ở tab Actions → Deploy → Run workflow.
+# Lỗi build xem ở tab Actions: bấm vào lần chạy có dấu ✗ đỏ → bước "Build" để đọc thông báo.
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 1 * * *' # 01:00 UTC = 08:00 giờ Việt Nam
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Chỉ một lần đưa lên chạy cùng lúc; lần mới không huỷ lần đang chạy dở
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lấy mã nguồn
+        uses: actions/checkout@v7
+
+      - name: Cài Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Cài thư viện
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          # Token có sẵn của Actions: lấy repo GitHub không bị giới hạn lượt gọi
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Đóng gói website
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Đưa lên GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

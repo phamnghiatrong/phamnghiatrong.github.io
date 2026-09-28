@@ -1,0 +1,209 @@
+---
+/**
+ * Thanh menu ngang, nổi và cố định khi cuộn.
+ * Máy tính: 3 mục + nhóm VI / EN / 中文.
+ * Điện thoại (< 1024px): 3 mục + 1 ô ngôn ngữ, icon trên chữ dưới; ô ngôn ngữ xoay VI → EN → 中文.
+ * Đổi ngôn ngữ luôn giữ nguyên trang đang xem.
+ */
+import Icon from './Icon.astro';
+import { LOCALES, HTML_LANG, localizePath, nextLocale, stripLocale, useT, type Locale } from '../i18n';
+
+export type NavKey = 'profile' | 'projects' | 'blog';
+
+interface Props {
+  locale: Locale;
+  current?: NavKey;
+  /** Đường dẫn (không tiền tố ngôn ngữ) mà nút đổi ngôn ngữ trỏ tới; mặc định là trang đang xem. */
+  langPath?: string;
+}
+
+const { locale, current, langPath } = Astro.props;
+const t = useT(locale);
+const here = langPath ?? stripLocale(Astro.url.pathname);
+
+const items: { key: NavKey; path: string }[] = [
+  { key: 'profile', path: '/' },
+  { key: 'projects', path: '/projects/' },
+  { key: 'blog', path: '/blog/' },
+];
+
+const next = nextLocale(locale);
+---
+
+<header class="site-header">
+  <nav class="nav" aria-label={t.nav.label}>
+    {
+      items.map((item) => (
+        <a
+          class:list={['tile', { on: item.key === current }]}
+          href={localizePath(locale, item.path)}
+          aria-current={item.key === current ? 'page' : undefined}
+        >
+          <Icon name={item.key} />
+          <span>{t.nav[item.key]}</span>
+        </a>
+      ))
+    }
+  </nav>
+
+  <div class="lang-group" role="group" aria-label={t.nav.language}>
+    {
+      LOCALES.map((l) => (
+        <a
+          class:list={['lang', { on: l === locale }]}
+          href={localizePath(l, here)}
+          hreflang={HTML_LANG[l]}
+          title={t.lang.names[l]}
+          aria-current={l === locale ? 'true' : undefined}
+        >
+          {/* Nhãn hiển thị viết bằng chính ngôn ngữ đó (chuẩn quốc tế); chú thích theo ngôn ngữ trang */}
+          <span lang={HTML_LANG[l]}>{useT(l).lang.short}</span>
+        </a>
+      ))
+    }
+  </div>
+
+  <a
+    class="tile lang-cycle"
+    href={localizePath(next, here)}
+    hreflang={HTML_LANG[next]}
+    aria-label={`${t.nav.language}: ${t.lang.names[locale]}. ${t.nav.switchTo} ${t.lang.names[next]}`}
+  >
+    <Icon name="globe" />
+    <span>{t.lang.short}</span>
+  </a>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: var(--nav-top);
+    z-index: 50;
+    width: calc(100% - 2 * var(--nav-top));
+    max-width: var(--nav-max);
+    margin: var(--nav-top) auto 0;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    background: var(--green);
+    border-radius: var(--radius-nav);
+  }
+
+  .nav {
+    display: flex;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  /* Mỗi mục là một ô riêng */
+  .tile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 48px;
+    padding: 0 18px;
+    border: 1px solid var(--nav-tile-line);
+    border-radius: var(--radius-tile);
+    background: transparent;
+    color: var(--nav-ink);
+    font-size: 15px;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: background var(--ease), border-color var(--ease), color var(--ease);
+  }
+  .tile :global(svg) {
+    flex-shrink: 0;
+  }
+  .tile:hover {
+    background: var(--nav-tile-hover);
+    border-color: var(--nav-tile-line-hover);
+    color: #fff;
+  }
+  .tile.on,
+  .tile.on:hover {
+    background: var(--green-soft);
+    border-color: var(--green-soft);
+    color: var(--green);
+    box-shadow: inset 3px 0 0 var(--brown-line);
+  }
+
+  /* Nhóm chọn ngôn ngữ (máy tính) */
+  .lang-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 48px;
+    padding: 0 7px;
+    border: 1px solid var(--nav-tile-line);
+    border-radius: var(--radius-tile);
+  }
+  .lang {
+    flex: 1;
+    min-width: 52px;
+    height: 34px;
+    padding: 0 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--nav-lang-line);
+    border-radius: var(--radius-btn);
+    color: var(--nav-ink);
+    font-size: 13px;
+    text-decoration: none;
+    transition: background var(--ease);
+  }
+  .lang:hover {
+    background: var(--nav-lang-hover);
+    color: #fff;
+  }
+  .lang.on,
+  .lang.on:hover {
+    background: var(--ground);
+    border-color: var(--ground);
+    color: var(--green);
+  }
+
+  .lang-cycle {
+    display: none;
+  }
+
+  /* Điện thoại và máy tính bảng */
+  @media (max-width: 1023.98px) {
+    .site-header {
+      top: var(--nav-top-mobile);
+      width: calc(100% - 2 * var(--nav-top-mobile));
+      margin-top: var(--nav-top-mobile);
+      padding: 8px;
+      gap: 6px;
+      border-radius: 18px;
+    }
+    .nav {
+      flex: 4;
+      gap: 6px;
+    }
+    .tile {
+      flex: 1;
+      min-width: 0;
+      height: 58px;
+      padding: 0 4px;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+      font-size: 12px;
+    }
+    .tile span {
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .lang-group {
+      display: none;
+    }
+    .lang-cycle {
+      display: flex;
+    }
+  }
+</style>

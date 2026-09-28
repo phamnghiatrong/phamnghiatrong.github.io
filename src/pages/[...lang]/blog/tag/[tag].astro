@@ -1,0 +1,23 @@
+---
+/** Bài theo trụ cột: /blog/tag/lab/, /en/blog/tag/lab/, ... (đủ 5 trụ cột, kể cả khi chưa có bài). */
+import Base from '../../../../layouts/Base.astro';
+import BlogIndex from '../../../../components/blog/BlogIndex.astro';
+import { DEFAULT_LOCALE, LOCALES, useT, type Locale } from '../../../../i18n';
+import { BLOG_TAGS, type BlogTag } from '../../../../lib/schemas';
+
+export function getStaticPaths() {
+  return LOCALES.flatMap((locale) =>
+    BLOG_TAGS.map((tag) => ({
+      params: { lang: locale === DEFAULT_LOCALE ? undefined : locale, tag },
+      props: { locale, tag },
+    })),
+  );
+}
+
+const { locale, tag } = Astro.props as { locale: Locale; tag: BlogTag };
+const t = useT(locale);
+---
+
+<Base locale={locale} title={`${t.blog.tags[tag]} · ${t.nav.blog}`} description={t.blog.description} current="blog">
+  <BlogIndex locale={locale} activeTag={tag} />
+</Base>

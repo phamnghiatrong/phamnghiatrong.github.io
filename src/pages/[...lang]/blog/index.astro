@@ -1,0 +1,14 @@
+---
+import Base from '../../../layouts/Base.astro';
+import BlogIndex from '../../../components/blog/BlogIndex.astro';
+import { localeFromParam, localeStaticPaths, useT } from '../../../i18n';
+
+export const getStaticPaths = localeStaticPaths;
+
+const locale = localeFromParam(Astro.params.lang);
+const t = useT(locale);
+---
+
+<Base locale={locale} title={t.nav.blog} description={t.blog.description} current="blog">
+  <BlogIndex locale={locale} />
+</Base>

@@ -1,0 +1,113 @@
+{
+  "lang": {
+    "short": "VI",
+    "name": "Tiếng Việt",
+    "names": {
+      "vi": "Tiếng Việt",
+      "en": "Tiếng Anh",
+      "zh-hant": "Tiếng Trung (phồn thể)"
+    }
+  },
+  "nav": {
+    "label": "Điều hướng chính",
+    "profile": "Hồ sơ",
+    "projects": "Dự án",
+    "blog": "Blog",
+    "language": "Ngôn ngữ",
+    "switchTo": "Chuyển sang"
+  },
+  "site": {
+    "description": "Sinh viên ngành Truyền thông & Mạng máy tính. Lab thật, tự động hóa, tối ưu mạng.",
+    "keysLine": "Lab thật · Tự động hóa · Tối ưu mạng"
+  },
+  "profile": {
+    "contactTitle": "Thông tin",
+    "birthDate": "Ngày sinh",
+    "phone": "Điện thoại",
+    "email": "Email",
+    "area": "Khu vực",
+    "socialTitle": "Mạng xã hội",
+    "socialLabel": "{network} của {name}",
+    "skillsTitle": "Kỹ năng",
+    "softTitle": "Kỹ năng mềm",
+    "languagesTitle": "Ngoại ngữ",
+    "aboutTitle": "Giới thiệu",
+    "careerTitle": "Định hướng nghề nghiệp",
+    "desiredPosition": "Vị trí mong muốn",
+    "availableFrom": "Có thể bắt đầu",
+    "projectsTitle": "Dự án",
+    "projectStatus": {
+      "dang-lam": "Đang làm",
+      "du-kien": "Dự kiến",
+      "xong": "Hoàn thành"
+    },
+    "educationTitle": "Học vấn",
+    "expectedGraduation": "Dự kiến tốt nghiệp",
+    "goalsTitle": "Chứng chỉ và mục tiêu",
+    "goalStatus": {
+      "dang-on": "Đang ôn",
+      "dat": "Đã đạt",
+      "ke-hoach": "Kế hoạch"
+    },
+    "postsTitle": "Bài viết mới",
+    "seeAll": "Xem tất cả",
+    "noPosts": "Bài viết đầu tiên sắp lên.",
+    "photoAlt": "Ảnh chân dung {name}",
+    "photoPlaceholder": "Ảnh đại diện 3:4"
+  },
+  "notFound": {
+    "title": "Không tìm thấy trang",
+    "text": "Trang bạn tìm không tồn tại hoặc đã được chuyển đi. Dùng thanh điều hướng phía trên để quay lại."
+  },
+  "blog": {
+    "description": "Bài lab, tự động hóa, tối ưu mạng bằng lập trình, ngoại ngữ và hành trình tự học. Blog ra 2 tuần một bài.",
+    "searchLabel": "Tìm bài",
+    "searchPlaceholder": "VLAN, OSPF, Netmiko…",
+    "filterLabel": "Lọc theo trụ cột",
+    "all": "Tất cả",
+    "colDate": "Ngày",
+    "colTitle": "Tiêu đề",
+    "colTag": "Trụ cột",
+    "channel": "Kênh gốc: {channel}",
+    "viOnlyBadge": "Tiếng Việt",
+    "noResults": "Không tìm thấy bài phù hợp. Thử từ khóa khác.",
+    "noPosts": "Bài viết đầu tiên sắp lên.",
+    "noPostsInTag": "Trụ cột này chưa có bài.",
+    "viOnlyNotice": "",
+    "readingTime": "{n} phút đọc",
+    "toc": "Mục lục",
+    "related": "Bài liên quan",
+    "updated": "Cập nhật {date}",
+    "allPosts": "Tất cả bài viết",
+    "rssTitle": "Blog của {name}",
+    "tags": {
+      "lab": "Lab thực hành",
+      "automation": "Tự động hóa",
+      "optimization": "Tối ưu mạng",
+      "language": "Ngoại ngữ",
+      "journey": "Hành trình"
+    },
+    "views": "{n} lượt xem",
+    "colViews": "Lượt xem"
+  },
+  "projects": {
+    "colWhen": "Thời gian",
+    "colProject": "Dự án",
+    "updated": "Cập nhật {date}",
+    "stars": "{n} sao",
+    "viewOnGithub": "Xem trên GitHub",
+    "homepage": "Trang demo",
+    "githubProfile": "GitHub của mình",
+    "notesTitle": "Ghi chú",
+    "readmeTitle": "README",
+    "planned": "Dự án đang ở giai đoạn lên kế hoạch. Mã nguồn sẽ đăng lên GitHub khi bắt đầu làm.",
+    "noReadme": "Kho mã này chưa có tệp README.",
+    "empty": "Chưa có dự án nào.",
+    "allProjects": "Tất cả dự án",
+    "stack": "Công nghệ",
+    "topics": "Chủ đề",
+    "language": "Ngôn ngữ",
+    "updatedLabel": "Cập nhật"
+  },
+  "placeholder": "Nội dung trang này sẽ được dựng ở bước tiếp theo."
+}

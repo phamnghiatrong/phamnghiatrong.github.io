@@ -1,0 +1,503 @@
+---
+/**
+ * Danh sách bài blog: tiêu đề, ô tìm kiếm, hàng nút lọc 5 trụ cột, bảng bài viết.
+ * Dùng cho /blog/ (tất cả) và /blog/tag/<trụ cột>/ (đã lọc).
+ * Nút lọc là link thường (chạy cả khi tắt JavaScript); ô tìm kiếm lọc ngay trên trang bằng một đoạn JS nhỏ.
+ */
+import TagLabel from './TagLabel.astro';
+import ViewCount from '../ViewCount.astro';
+import { site } from '../../lib/data';
+import { localizePath, useT, type Locale } from '../../i18n';
+import { countByTag, formatPostDate, getPosts } from '../../lib/blog';
+import { BLOG_TAGS, type BlogTag } from '../../lib/schemas';
+import { searchKey } from '../../lib/search';
+
+interface Props {
+  locale: Locale;
+  activeTag?: BlogTag;
+}
+
+const { locale, activeTag } = Astro.props;
+const t = useT(locale);
+const b = t.blog;
+const fill = (template: string, values: Record<string, string>) =>
+  template.replace(/\{(\w+)\}/g, (_, key) => values[key] ?? '');
+
+const all = await getPosts(locale);
+const counts = countByTag(all);
+const posts = activeTag ? all.filter((p) => p.entry.data.tags.includes(activeTag)) : all;
+
+const chips = [
+  { key: 'all', label: b.all, count: all.length, href: localizePath(locale, '/blog/') },
+  ...BLOG_TAGS.map((tag) => ({
+    key: tag,
+    label: b.tags[tag],
+    count: counts[tag],
+    href: localizePath(locale, `/blog/tag/${tag}/`),
+  })),
+];
+const activeKey = activeTag ?? 'all';
+const active = chips.find((chip) => chip.key === activeKey)!;
+---
+
+<header class="blog-head">
+  <div class="title-row">
+    <h1 class="title">{t.nav.blog}</h1>
+
+    <!-- Nút lọc xổ xuống: mặc định "Tất cả"; mỗi mục là link tới trang trụ cột -->
+    <details class="filter" data-filter>
+      <summary class="filter-btn">
+        <span class="sr-only">{b.filterLabel}: </span>
+        <span>{active.label}</span>
+        <span class="count">{active.count}</span>
+        <svg
+          class="chevron"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6"></path>
+        </svg>
+      </summary>
+      <ul class="filter-menu">
+        {
+          chips.map((chip) => (
+            <li>
+              <a
+                class:list={['filter-item', { on: chip.key === activeKey }]}
+                href={chip.href}
+                aria-current={chip.key === activeKey ? 'page' : undefined}
+              >
+                <span>{chip.label}</span>
+                <span class="count">{chip.count}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </details>
+  </div>
+
+  <div class="search" data-search-box hidden>
+    <label for="blog-search">{b.searchLabel}</label>
+    <input id="blog-search" type="search" placeholder={b.searchPlaceholder} autocomplete="off" spellcheck="false" />
+  </div>
+</header>
+
+{
+  posts.length > 0 ? (
+    <div class:list={['table', { 'has-views': !!site.goatcounter }]}>
+      <div class="thead" aria-hidden="true">
+        <span class="th-date">{b.colDate}</span>
+        <span>{b.colTitle}</span>
+        <span>{b.colTag}</span>
+        {site.goatcounter && <span class="th-views">{b.colViews}</span>}
+      </div>
+      <ul class="rows">
+        {posts.map((post) => {
+          const d = post.entry.data;
+          const meta = [
+            d.channel && fill(b.channel, { channel: d.channel }),
+            !post.translated && b.viOnlyBadge,
+          ].filter(Boolean);
+          return (
+            <li
+              data-search={searchKey(
+                [d.title, d.description, d.channel ?? '', ...d.tags.map((tag) => b.tags[tag]), ...d.tags].join(' '),
+              )}
+            >
+              <a class="row lift" href={post.href}>
+                <span class="date dot">
+                  <time datetime={d.date.toISOString().slice(0, 10)}>{formatPostDate(d.date, locale)}</time>
+                </span>
+                <span class="main">
+                  <span class="ttl" lang={post.translated ? undefined : 'vi'}>
+                    {d.title}
+                  </span>
+                  {meta.length > 0 && <span class="meta">{meta.join(' · ')}</span>}
+                </span>
+                <span class="tags">
+                  {d.tags.map((tag) => (
+                    <TagLabel tag={tag} locale={locale} />
+                  ))}
+                </span>
+                <ViewCount class="views" path={`/blog/${post.slug}/`} template={b.views} />
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+      <p class="empty" data-no-results hidden>
+        {b.noResults}
+      </p>
+    </div>
+  ) : (
+    <p class="empty">{activeTag ? b.noPostsInTag : b.noPosts}</p>
+  )
+}
+
+<script>
+  import { searchKey } from '../../lib/search';
+
+  // Nút lọc: đóng khi bấm ra ngoài hoặc nhấn Esc
+  const filter = document.querySelector<HTMLDetailsElement>('[data-filter]');
+  if (filter) {
+    document.addEventListener('click', (event) => {
+      if (filter.open && !filter.contains(event.target as Node)) filter.open = false;
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && filter.open) {
+        filter.open = false;
+        filter.querySelector('summary')?.focus();
+      }
+    });
+  }
+
+  const box = document.querySelector<HTMLElement>('[data-search-box]');
+  const input = box?.querySelector('input');
+  const items = [...document.querySelectorAll<HTMLElement>('[data-search]')];
+  const none = document.querySelector<HTMLElement>('[data-no-results]');
+
+  if (box && input && items.length > 0) {
+    box.hidden = false;
+
+    const apply = () => {
+      const words = searchKey(input.value).split(' ').filter(Boolean);
+      let shown = 0;
+      for (const item of items) {
+        const match = words.every((w) => item.dataset.search!.includes(w));
+        item.hidden = !match;
+        if (match) shown++;
+      }
+      if (none) none.hidden = shown > 0;
+    };
+
+    // Cho phép mở sẵn kết quả tìm kiếm bằng link: /blog/?q=ospf
+    const q = new URLSearchParams(location.search).get('q');
+    if (q) input.value = q;
+    input.addEventListener('input', apply);
+    apply();
+  }
+</script>
+
+<style>
+  .blog-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    padding-top: 16px;
+  }
+  /* Chữ nằm trực tiếp trên video nền → màu sáng */
+  .title {
+    font-size: 48px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--on-video);
+    text-shadow: var(--on-video-shadow);
+  }
+  .search {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex-shrink: 0;
+    font-size: 13px;
+    color: var(--on-video-muted);
+    text-shadow: var(--on-video-shadow);
+  }
+  .search input {
+    width: 300px;
+    height: 44px;
+    padding: 0 14px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-row);
+    background: rgba(255, 255, 255, 0.08);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    color: var(--ink);
+    font-size: 15px;
+  }
+  .search input::placeholder {
+    color: var(--muted);
+    opacity: 1;
+  }
+  .search input:focus {
+    outline: none;
+    border-color: var(--green-hover);
+  }
+  .search input:focus-visible {
+    outline: 2px solid var(--marker);
+    outline-offset: 2px;
+  }
+
+  .title-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+  }
+
+  /* Nút lọc xổ xuống — cùng tông với thanh menu: nền xanh, góc hơi vuông */
+  .filter {
+    position: relative;
+  }
+  .filter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 12px 0 14px;
+    border: 1px solid var(--green);
+    border-radius: var(--radius-btn);
+    background: var(--green);
+    color: #fff;
+    font-size: 14px;
+    white-space: nowrap;
+    cursor: pointer;
+    list-style: none;
+    transition: background var(--ease), border-color var(--ease);
+  }
+  .filter-btn::-webkit-details-marker {
+    display: none;
+  }
+  /* Chỉ mở menu, không chuyển trang → đổi màu, không nổi lên */
+  .filter-btn:hover {
+    background: var(--green-hover);
+    border-color: var(--green-hover);
+  }
+  .filter-btn .count {
+    color: var(--nav-ink);
+  }
+  .chevron {
+    transition: transform var(--ease);
+  }
+  .filter[open] .chevron {
+    transform: rotate(180deg);
+  }
+  .count {
+    opacity: 0.8;
+  }
+
+  /* Menu xổ xuống: nền trắng; chỉ nút chọn ở trên là màu xanh */
+  .filter-menu {
+    position: absolute;
+    z-index: 20;
+    top: calc(100% + 8px);
+    left: 0;
+    min-width: 230px;
+    margin: 0;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    list-style: none;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+    border-radius: var(--radius-row);
+  }
+  .filter-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    height: 40px;
+    padding: 0 12px;
+    border-radius: var(--radius-btn);
+    color: var(--ink);
+    font-size: 15px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background var(--ease), color var(--ease);
+  }
+  .filter-item .count {
+    color: var(--muted);
+  }
+  .filter-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--ink);
+  }
+  /* Ô đang chọn: cùng màu xanh đậm với nút chọn và nút mạng xã hội */
+  .filter-item.on,
+  .filter-item.on:hover {
+    background: var(--green);
+    color: #fff;
+  }
+  .filter-item.on .count {
+    color: var(--nav-ink);
+  }
+
+  /* Bảng bài viết */
+  .table {
+    margin-top: 28px;
+  }
+  .thead,
+  .row {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr) 160px;
+    gap: 24px;
+  }
+  .thead {
+    padding: 0 20px 10px;
+    border-bottom: 1px solid var(--on-video-line);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--on-video-muted);
+    text-shadow: var(--on-video-shadow);
+    text-align: left;
+  }
+  .th-date {
+    padding-left: var(--star-indent);
+  }
+  /* Có đếm lượt xem: thêm cột bên phải */
+  .has-views .thead,
+  .has-views .row {
+    grid-template-columns: 140px minmax(0, 1fr) 160px 110px;
+  }
+  /* Số lượt xem nằm trong component ViewCount → cần :global để kiểu chữ áp vào */
+  .th-views,
+  .row :global(.views) {
+    text-align: right;
+  }
+  .row :global(.views) {
+    font-size: 13px;
+    color: var(--on-video-muted);
+    text-shadow: var(--on-video-shadow);
+  }
+  .rows {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .row {
+    align-items: center;
+    padding: 18px 20px;
+    border: 1px solid transparent;
+    border-bottom-color: var(--on-video-line);
+    border-radius: var(--radius-row);
+    color: var(--on-video);
+    text-shadow: var(--on-video-shadow);
+    text-decoration: none;
+  }
+  .date {
+    font-size: 13px;
+    color: var(--on-video-muted);
+    text-shadow: var(--on-video-shadow);
+    text-align: left;
+  }
+  .date.dot::before {
+    background: var(--brown-on-video);
+  }
+  /* Trỏ chuột: dòng nổi lên nền trắng → chữ trở lại màu tối */
+  .row:hover {
+    color: var(--ink);
+  }
+  .row:hover,
+  .row:hover * {
+    text-shadow: none;
+  }
+  .row:hover .ttl {
+    color: var(--accent);
+  }
+  .main {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+  .ttl {
+    font-size: 17px;
+    line-height: 1.35;
+    transition: color var(--ease);
+  }
+  .date {
+    transition: color var(--ease);
+  }
+  .meta {
+    font-size: 13px;
+    color: var(--on-video-muted);
+    text-shadow: var(--on-video-shadow);
+    transition: color var(--ease);
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .empty {
+    margin: 0;
+    padding: 18px 20px;
+    color: var(--on-video-muted);
+    text-shadow: var(--on-video-shadow);
+  }
+
+  @media (max-width: 1023.98px) {
+    .blog-head {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 20px;
+      padding-top: 0;
+    }
+    .title {
+      font-size: 40px;
+    }
+    .search input {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    .thead {
+      display: none;
+    }
+    .table {
+      margin-top: 20px;
+    }
+    .row {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas:
+        'date'
+        'main'
+        'tags';
+      gap: 6px;
+      padding: 14px 10px;
+      border-radius: var(--radius-btn);
+    }
+    .date {
+      grid-area: date;
+    }
+    .main {
+      grid-area: main;
+      padding-left: var(--star-indent);
+    }
+    .tags {
+      grid-area: tags;
+      padding-left: var(--star-indent);
+    }
+    .has-views .row {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas:
+        'date'
+        'main'
+        'tags'
+        'views';
+    }
+    .row :global(.views) {
+      grid-area: views;
+      padding-left: var(--star-indent);
+      text-align: left;
+    }
+    .ttl {
+      font-size: 16px;
+    }
+  }
+</style>

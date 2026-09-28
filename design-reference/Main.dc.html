@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Trang chủ</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&amp;family=Noto+Sans+TC:wght@400&amp;display=swap">
+<style>
+body{margin:0;font-family:"Roboto","Noto Sans TC",system-ui,sans-serif;color:#1E2420;background:#FAF8F4}
+a{color:#2A6E47}a:hover{color:#368A58}
+h1,h2,h3{font-weight:400;font-family:"Roboto","Noto Sans TC",sans-serif;margin:0;text-wrap:balance}
+.lang{flex:1;min-width:52px;height:34px;padding:0 8px;border-radius:8px;border:1px solid rgba(255,255,255,.22);background:transparent;color:#DCEBE0;font:400 13px "Roboto","Noto Sans TC",sans-serif;cursor:pointer;transition:background .18s ease-out}
+.lang:hover{background:rgba(255,255,255,.12)}
+.lang.on{background:#FAF8F4;color:#2A6E47;border-color:#FAF8F4}
+.btn{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 22px;border-radius:10px;font-weight:400;font-size:15px;text-decoration:none;border:1.5px solid transparent;cursor:pointer;transition:background .18s ease-out,transform .18s ease-out,box-shadow .18s ease-out,border-color .18s ease-out}
+.btn-p{background:#2A6E47;color:#FFFFFF}
+.btn-p:hover{background:#368A58;color:#FFFFFF;transform:translateY(-2px);box-shadow:0 12px 24px -16px rgba(42,110,71,.55)}
+.btn-p:active{transform:translateY(0) scale(.98)}
+.btn-g{background:transparent;color:#2A6E47;border-color:#B7CDBE}
+.btn-g:hover{background:#E4F0E7;border-color:#368A58;color:#2A6E47;transform:translateY(-2px);box-shadow:0 12px 24px -16px rgba(42,110,71,.55)}
+.btn-b{background:#4E2C15;color:#FFFFFF}
+.btn-b:hover{background:#633A1E;color:#FFFFFF;transform:translateY(-2px);box-shadow:0 12px 24px -16px rgba(78,44,21,.55)}
+.card{background:#FFFFFF;border:1px solid #E2DDD3;border-radius:12px;transition:border-color .18s ease-out,transform .18s ease-out,box-shadow .18s ease-out;text-decoration:none;color:#1E2420}
+.card:hover{border-color:#368A58;transform:translateY(-3px);box-shadow:0 12px 24px -16px rgba(42,110,71,.55);color:#1E2420}
+.more{color:#2A6E47;font-weight:400;font-size:14px;text-decoration:none;display:inline-flex;gap:6px;align-items:center}
+.more:hover{color:#4E2C15}
+.soc{color:#5E6B62;text-decoration:none;font-size:14px}
+.soc:hover{color:#2A6E47;text-decoration:underline}
+.lift{transition:transform .18s ease-out,box-shadow .18s ease-out,border-color .18s ease-out;position:relative}
+.lift:hover{transform:translateY(-3px);box-shadow:0 12px 24px -16px rgba(42,110,71,.55);border-color:#368A58;background-color:#FFFFFF;z-index:1}
+.soc-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:42px;padding:0 14px;border:1px solid #2A6E47;border-radius:8px;background:#2A6E47;color:#FFFFFF;font:400 14px "Roboto",sans-serif;text-decoration:none;transition:background .18s ease-out,transform .18s ease-out,box-shadow .18s ease-out,border-color .18s ease-out}
+.soc-btn:hover{color:#FFFFFF;background:#368A58;border-color:#368A58;transform:translateY(-3px);box-shadow:0 12px 24px -16px rgba(42,110,71,.55)}
+main{text-align:justify;text-justify:inter-word}
+main h1,main h2,main h3{text-align:left}
+.tile{display:flex;align-items:center;gap:12px;width:100%;box-sizing:border-box;height:48px;padding:0 14px;border:1px solid rgba(255,255,255,.18);border-radius:12px;background:transparent;color:#DCEBE0;text-decoration:none;font:400 15px "Roboto","Noto Sans TC",sans-serif;white-space:nowrap;overflow:hidden;cursor:pointer;transition:background .18s ease-out,border-color .18s ease-out,color .18s ease-out}
+.tile:hover{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.34);color:#FFFFFF}
+.tile.on{background:#E4F0E7;border-color:#E4F0E7;color:#2A6E47;box-shadow:inset 3px 0 0 #7A4B28}
+.tile.static{cursor:default}
+.tile.static:hover{background:transparent;border-color:rgba(255,255,255,.18);color:#DCEBE0}
+.cv-h{font-size:22px;color:#2A6E47;padding-bottom:10px;border-bottom:1px solid #D9D2C5;margin-bottom:4px}
+.cv-row{display:grid;grid-template-columns:150px minmax(0,1fr);gap:28px;align-items:start;padding:16px 18px;border:1px solid transparent;border-bottom-color:#EFEBE3;border-radius:10px}
+.cv-when{font-size:14px;color:#4E2C15;line-height:1.6;text-align:left}
+.cv-body{display:flex;flex-direction:column;gap:4px;min-width:0}
+.cv-title{font-size:17px;color:#1E2420;line-height:1.4}
+.cv-sub{font-size:15px;color:#3C4740}
+.cv-text{font-size:15px;color:#5E6B62;line-height:1.6}
+.cv-meta{font-size:13px;color:#5E6B62;margin-top:2px}
+.panel{background:#FFFFFF;border:1px solid #E2DDD3;border-radius:16px;padding:24px}
+.sec-h{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#2A6E47;padding-bottom:10px;border-bottom:1px solid #D9D2C5;margin-bottom:4px}
+.kv{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:10px 12px;border:1px solid transparent;border-radius:8px}
+.kv-k{font-size:13px;color:#5E6B62;white-space:nowrap}
+.kv-v{font-size:15px;color:#1E2420;text-align:right;min-width:0}
+.soc-btn{width:100%;box-sizing:border-box;justify-content:flex-start}
+:focus-visible{outline:2px solid #7A4B28;outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 2550px; display: flex; flex-direction: column; background: #FAF8F4; overflow: hidden">
+
+<header style="width: calc(100% - 32px); max-width: 1248px; box-sizing: border-box; margin: 16px auto 0; background: #2A6E47; border-radius: 20px; padding: 10px; display: flex; align-items: center; justify-content: space-between; gap: 16px">
+  <nav aria-label="Menu chính" style="display: flex; gap: 8px">
+    <a class="tile on" href="Main.dc.html" aria-current="page" style="width: auto; padding: 0 18px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path><path d="M9.5 21v-6h5v6"></path></svg><span>{{t.nav.home}}</span></a>
+    <a class="tile" href="Main.dc.html" style="width: auto; padding: 0 18px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0" aria-hidden="true"><circle cx="6" cy="6" r="2.5"></circle><circle cx="6" cy="18" r="2.5"></circle><circle cx="18" cy="8" r="2.5"></circle><path d="M6 8.5v7"></path><path d="M18 10.5c0 4-5 4-10 6"></path></svg><span>{{t.nav.projects}}</span></a>
+    <a class="tile" href="Blog.dc.html" style="width: auto; padding: 0 18px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0" aria-hidden="true"><path d="M2 5h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"></path><path d="M22 5h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"></path></svg><span>{{t.nav.blog}}</span></a>
+  </nav>
+  <div class="tile static" style="width: auto; gap: 6px; padding: 0 7px">
+    <button class="{{clsVi}}" type="button" onClick="{{setVi}}">VI</button>
+    <button class="{{clsEn}}" type="button" onClick="{{setEn}}">EN</button>
+    <button class="{{clsZh}}" type="button" onClick="{{setZh}}">繁中</button>
+  </div>
+</header>
+
+<main style="flex-grow: 1; min-width: 0; width: 100%; max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; padding: 40px 32px 40px; box-sizing: border-box; gap: 48px">
+  <div style="display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 56px; align-items: start">
+    <aside class="panel" style="display: flex; flex-direction: column; gap: 28px; align-self: start">
+      <div style="display: flex; flex-direction: column; gap: 16px">
+        <div style="width: 100%; aspect-ratio: 3 / 4; max-width: 100%; border-radius: 12px; background: #EFE6DA; border: 1.5px dashed #C9A27E; display: flex; align-items: center; justify-content: center; color: #4E2C15; font-size: 13px">[Ảnh đại diện · 3:4]</div>
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <h1 style="font-size: 32px; line-height: 1.2; color: #1E2420; letter-spacing: -0.01em">Phạm Nghĩa Trọng</h1>
+          <span style="font-size: 15px; color: #2A6E47; line-height: 1.5">{{t.role}}</span>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <h2 class="sec-h">{{t.contactTitle}}</h2>
+          <div class="kv lift"><span class="kv-k">{{t.dobLabel}}</span><span class="kv-v">[dd/mm/yyyy]</span></div>
+          <div class="kv lift"><span class="kv-k">{{t.phoneLabel}}</span><span class="kv-v">[số điện thoại]</span></div>
+          <div class="kv lift"><span class="kv-k">Email</span><span class="kv-v">[email]</span></div>
+          <div class="kv lift"><span class="kv-k">{{t.areaLabel}}</span><span class="kv-v">[Thành phố]</span></div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <h2 class="sec-h">{{t.socialTitle}}</h2>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+          <a class="soc-btn" href="https://github.com/" aria-label="GitHub của Phạm Nghĩa Trọng"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 7-5 5 5 5M16 7l5 5-5 5"></path></svg>GitHub</a>
+          <a class="soc-btn" href="https://www.linkedin.com/" aria-label="LinkedIn của Phạm Nghĩa Trọng"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5h6v2M3 13h18"></path></svg>LinkedIn</a>
+          <a class="soc-btn" href="https://www.youtube.com/" aria-label="YouTube của Phạm Nghĩa Trọng"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="4"></rect><path d="m10 9 5 3-5 3z"></path></svg>YouTube</a>
+          <a class="soc-btn" href="https://www.tiktok.com/" aria-label="TikTok của Phạm Nghĩa Trọng"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l10-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="16" cy="16" r="3"></circle></svg>TikTok</a>
+          <a class="soc-btn" href="https://www.instagram.com/" aria-label="Instagram của Phạm Nghĩa Trọng"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg>Instagram</a>
+          <a class="soc-btn" href="https://www.facebook.com/" aria-label="Facebook của Phạm Nghĩa Trọng"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c0-3.5 3-6 6.5-6s6.5 2.5 6.5 6"></path><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14c2 .7 3.5 2.8 3.5 6"></path></svg>Facebook</a>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <h2 class="sec-h">{{t.skillsTitle}}</h2>
+        <sc-for list="{{skills}}" as="sk" hint-placeholder-count="5">
+          <div class="kv lift" style="flex-direction: column; align-items: flex-start; gap: 2px"><span class="kv-k">{{sk.group}}</span><span class="kv-v" style="text-align: left">{{sk.itemsStr}}</span></div>
+        </sc-for>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <h2 class="sec-h">{{t.softTitle}}</h2>
+        <sc-for list="{{t.soft}}" as="sf" hint-placeholder-count="3">
+          <div class="kv lift"><span class="kv-v" style="text-align: left">{{sf}}</span></div>
+        </sc-for>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <h2 class="sec-h">{{t.langTitle}}</h2>
+        <sc-for list="{{t.langs}}" as="lg" hint-placeholder-count="3">
+          <div class="kv lift"><span class="kv-v" style="text-align: left">{{lg.name}}</span><span class="kv-k" style="text-align: right">{{lg.level}}</span></div>
+        </sc-for>
+      </div>
+    </aside>
+    <div style="display: flex; flex-direction: column; gap: 44px; min-width: 0">
+      <section style="display: flex; flex-direction: column; gap: 14px">
+        <h2 class="sec-h">{{t.aboutTitle}}</h2>
+        <p style="margin: 0; font-size: 17px; line-height: 1.75; color: #1E2420">{{t.summary}}</p>
+</section>
+
+      <section style="display: flex; flex-direction: column; gap: 4px">
+        <h2 class="sec-h">{{t.careerTitle}}</h2>
+        <sc-for list="{{t.careers}}" as="c" hint-placeholder-count="3">
+          <div class="cv-row lift">
+            <span class="cv-when">{{c.term}}<br><span style="color: #5E6B62">{{c.when}}</span></span>
+            <div class="cv-body">
+              <span class="cv-title">{{c.role}}</span>
+              <span class="cv-text">{{c.desc}}</span>
+            </div>
+          </div>
+        </sc-for>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 10px">
+          <div class="kv lift" style="border: 1px solid #E2DDD3; border-radius: 10px; background: #FFFFFF"><span class="kv-k">{{t.eduShortLabel}}</span><span class="kv-v">{{t.wantVal}}</span></div>
+          <div class="kv lift" style="border: 1px solid #E2DDD3; border-radius: 10px; background: #FFFFFF"><span class="kv-k">{{t.gradLabel}}</span><span class="kv-v">09/2027</span></div>
+        </div>
+            </section>
+
+      <section style="display: flex; flex-direction: column; gap: 4px">
+        <h2 class="sec-h">{{t.projTitle}}</h2>
+        <sc-for list="{{projects}}" as="p" hint-placeholder-count="3">
+          <a class="cv-row lift" href="Main.dc.html" style="text-decoration: none; color: #1E2420">
+            <span class="cv-when">{{p.period}}<br><span style="color: {{p.stateColor}}">{{p.state}}</span></span>
+            <div class="cv-body">
+              <span class="cv-title">{{p.title}}</span>
+              <span class="cv-text">{{p.desc}}</span>
+              <span class="cv-meta">{{p.stackStr}} · github.com/[handle]/{{p.repo}}</span>
+            </div>
+          </a>
+        </sc-for>
+      </section>
+
+      <section style="display: flex; flex-direction: column; gap: 4px">
+        <h2 class="sec-h">{{t.eduTitle}}</h2>
+        <div class="cv-row lift">
+          <span class="cv-when">{{t.edu.time}}</span>
+          <div class="cv-body">
+            <span class="cv-title">{{t.edu.school}}</span>
+            <span class="cv-sub">{{t.edu.major}}</span>
+            <span class="cv-text">{{t.edu.courses}}</span>
+          </div>
+        </div>
+      </section>
+
+      <section style="display: flex; flex-direction: column; gap: 4px">
+        <h2 class="sec-h">{{t.goalsTitle}}</h2>
+        <sc-for list="{{t.goals}}" as="g" hint-placeholder-count="4">
+          <div class="cv-row lift">
+            <span class="cv-when">{{g.when}}</span>
+            <div class="cv-body" style="flex-direction: row; justify-content: space-between; gap: 24px">
+              <span class="cv-title" style="font-size: 16px">{{g.name}}</span>
+              <span style="font-size: 14px; color: {{g.color}}; white-space: nowrap">{{g.status}}</span>
+            </div>
+          </div>
+        </sc-for>
+      </section>
+
+      <section style="display: flex; flex-direction: column; gap: 4px">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px; border-bottom: 1px solid #D9D2C5; padding-bottom: 10px; margin-bottom: 4px">
+          <h2 class="sec-h" style="border: 0; padding: 0; margin: 0">{{t.postTitle}}</h2>
+          <a class="more" href="Blog.dc.html">{{t.seeAll}}</a>
+        </div>
+        <sc-if value="{{showViOnly}}" hint-placeholder-val="{{ false }}">
+          <div style="padding: 10px 14px; border-radius: 8px; background: #F1E7DC; color: #4E2C15; font-size: 14px; margin: 6px 0">{{t.viOnly}}</div>
+        </sc-if>
+        <sc-for list="{{posts}}" as="po" hint-placeholder-count="3">
+          <a class="cv-row lift" href="Blog.dc.html" style="text-decoration: none; color: #1E2420">
+            <span class="cv-when">{{po.when}}</span>
+            <div class="cv-body">
+              <span class="cv-title">{{po.title}}</span>
+              <span class="cv-meta">{{po.tag}} · [lượt xem]</span>
+            </div>
+          </a>
+        </sc-for>
+      </section>
+    </div>
+  </div>
+
+  <footer style="display: flex; justify-content: center; text-align: center; align-items: center; gap: 24px; padding-top: 20px; border-top: 1px solid #E2DDD3; flex-wrap: wrap">
+    <span style="font-size: 14px; color: #5E6B62">© 2026 Phạm Nghĩa Trọng · {{t.keysLine}}</span>
+  </footer>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"startLang":{"editor":"enum","options":["vi","en","zh-hant"],"default":"vi"},"$preview":{"width":1440,"height":2550}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { lang: null, collapsed: null };
+  }
+  renderVals() {
+    var UP = '#1E7A45', PLAN = '#7A6A5A';
+    var D = {
+      vi: {
+        nav: { home: 'Hồ sơ', projects: 'Project', blog: 'Blog', course: 'Khóa Lab Mạng', links: 'Liên kết' },
+        langLabel: 'Ngôn ngữ',
+        role: 'Sinh viên Viễn thông · hướng Network Automation',
+        summary: 'Mình làm lab Cisco/Juniper, tự động hóa mạng bằng Python và dùng code để tối ưu định tuyến, băng thông. Đang ôn CCNA v2.0, học tiếng Anh và tiếng Trung.',
+        areaLabel: 'Khu vực', dobLabel: 'Ngày sinh', phoneLabel: 'Điện thoại', eduShortLabel: 'Vị trí mong muốn', wantVal: 'Thực tập Network / NOC', gradLabel: 'Có thể bắt đầu',
+        eduTitle: 'Học vấn', careerTitle: 'Định hướng nghề nghiệp',
+        careers: [
+          { term: 'Ngắn hạn', when: '2026 – 2027', role: 'Thực tập sinh Network / NOC', desc: 'Đạt CCNA v2.0, hoàn thành 3 project tự động hóa trên GitHub và có kinh nghiệm vận hành mạng thực tế qua kỳ thực tập.' },
+          { term: 'Trung hạn', when: '2028 – 2030', role: 'Network Engineer', desc: 'Thiết kế, triển khai và vận hành hạ tầng mạng doanh nghiệp; ôn CCNP Enterprise; đưa tự động hóa vào công việc vận hành hằng ngày.' },
+          { term: 'Dài hạn', when: '2030 trở đi', role: 'Network Automation Engineer', desc: 'Chuyên sâu tự động hóa và tối ưu mạng bằng code, làm việc được bằng tiếng Anh và tiếng Trung với đối tác quốc tế.' }
+        ],
+        aboutTitle: 'Giới thiệu', contactTitle: 'Thông tin', socialTitle: 'Mạng xã hội',
+        edu: { school: '[Tên trường]', time: '[năm vào] – [năm TN]', major: 'Ngành Viễn thông', courses: 'Môn học kỳ này: Quản trị hạ tầng mạng nâng cao, Quản trị Linux, Quản trị Windows, Mạng cáp quang và ứng dụng.' },
+        projTitle: 'Project', stateNow: 'Đang làm', statePlan: 'Dự kiến', seeAll: 'Xem tất cả',
+        ghNote: 'Thông tin repo lấy tự động từ GitHub khi site build.',
+        projects: [
+          { repo: 'config-backup', status: 'Đang làm', title: 'Backup cấu hình tự động', desc: 'Lấy running-config nhiều thiết bị cùng lúc, lưu theo ngày, báo thiết bị lỗi kết nối.', stack: ['Python', 'Netmiko'], live: true },
+          { repo: 'net-optimizer', status: '01–04/2027', title: 'Tối ưu định tuyến và băng thông', desc: 'Quy hoạch tuyến tính chia băng thông, đường đi ngắn nhất và đường dự phòng.', stack: ['NetworkX', 'PuLP'], live: false },
+          { repo: 'bgp-lab-as-code', status: '05–08/2027', title: 'Lab BGP dựng bằng code', desc: 'Topology BGP khai báo trong một file, dựng lại trong vài phút.', stack: ['containerlab', 'FRR', 'Ansible'], live: false }
+        ],
+        skillsTitle: 'Kỹ năng',
+        skills: [
+          { group: 'Mạng', items: ['Subnetting', 'VLAN, trunk', 'STP', 'Inter-VLAN routing', 'OSPF'] },
+          { group: 'Công cụ lab', items: ['Packet Tracer', 'GNS3', 'containerlab'] },
+          { group: 'Tự động hóa', items: ['Python', 'Netmiko', 'Ansible (đang học)', 'NetBox (đang học)'] },
+          { group: 'Hệ thống', items: ['Linux', 'Windows Server'] },
+          { group: 'Tối ưu mạng', items: ['NetworkX', 'PuLP'] },
+          { group: 'Ứng dụng AI', items: ['Dùng Claude, ChatGPT để viết và rà soát script', 'tra cứu tài liệu kỹ thuật', 'soạn tài liệu; luôn kiểm chứng lại kết quả'] }
+        ],
+        softTitle: 'Kỹ năng mềm', soft: ['Viết tài liệu kỹ thuật', 'Tự học có kế hoạch', 'Trình bày và chia sẻ kiến thức', 'Làm việc nhóm', 'Chịu áp lực và quản lý thời gian'],
+        langTitle: 'Ngoại ngữ',
+        langs: [
+          { name: 'Tiếng Việt', level: 'Bản ngữ' },
+          { name: 'English', level: 'Đang luyện IELTS 6.5' },
+          { name: '中文', level: 'Đang học HSK 1' }
+        ],
+        goalsTitle: 'Chứng chỉ và mục tiêu',
+        goals: [
+          { name: 'CCNA 200-301 v2.0', status: 'Đang ôn', when: '04/2027', color: UP },
+          { name: 'IELTS Academic 6.5', status: 'Đang luyện', when: '06/2027', color: UP },
+          { name: 'HSK 3 + HSKK', status: 'Đang học', when: '08/2027', color: UP },
+          { name: 'Thực tập mạng', status: 'Kế hoạch', when: '09/2027', color: PLAN }
+        ],
+        postTitle: 'Bài viết mới', viOnly: '',
+        keysLine: 'Lab thật · Tự động hóa · Tối ưu mạng'
+      },
+      en: {
+        nav: { home: 'Profile', projects: 'Projects', blog: 'Blog', course: 'Network Lab course', links: 'Links' },
+        langLabel: 'Language',
+        role: 'Telecommunications student · Network Automation track',
+        summary: 'I build Cisco/Juniper labs, automate networks with Python, and use code to optimize routing and bandwidth. Studying for CCNA v2.0, learning English and Chinese.',
+        areaLabel: 'Location', dobLabel: 'Date of birth', phoneLabel: 'Phone', eduShortLabel: 'Looking for', wantVal: 'Network / NOC internship', gradLabel: 'Available from',
+        eduTitle: 'Education', careerTitle: 'Career direction',
+        careers: [
+          { term: 'Short term', when: '2026 – 2027', role: 'Network / NOC intern', desc: 'Pass CCNA v2.0, finish 3 automation projects on GitHub, and gain hands-on network operations experience through an internship.' },
+          { term: 'Mid term', when: '2028 – 2030', role: 'Network Engineer', desc: 'Design, deploy and operate enterprise networks; study for CCNP Enterprise; bring automation into daily operations.' },
+          { term: 'Long term', when: '2030 onward', role: 'Network Automation Engineer', desc: 'Specialize in network automation and optimization with code, working in English and Chinese with international partners.' }
+        ],
+        aboutTitle: 'About', contactTitle: 'Details', socialTitle: 'Social',
+        edu: { school: '[University]', time: '[start] – [grad]', major: 'Telecommunications', courses: 'This term: Advanced Network Infrastructure, Linux Administration, Windows Administration, Optical Fiber Networks.' },
+        projTitle: 'Projects', stateNow: 'In progress', statePlan: 'Planned', seeAll: 'See all',
+        ghNote: 'Repository details are pulled from GitHub at build time.',
+        projects: [
+          { repo: 'config-backup', status: 'In progress', title: 'Automated config backup', desc: 'Pulls running-config from many devices at once, stores it by date, flags unreachable devices.', stack: ['Python', 'Netmiko'], live: true },
+          { repo: 'net-optimizer', status: '01–04/2027', title: 'Routing and bandwidth optimization', desc: 'Linear programming for bandwidth allocation, shortest and backup paths.', stack: ['NetworkX', 'PuLP'], live: false },
+          { repo: 'bgp-lab-as-code', status: '05–08/2027', title: 'BGP lab as code', desc: 'A BGP topology declared in one file, rebuilt in minutes.', stack: ['containerlab', 'FRR', 'Ansible'], live: false }
+        ],
+        skillsTitle: 'Skills',
+        skills: [
+          { group: 'Networking', items: ['Subnetting', 'VLAN, trunking', 'STP', 'Inter-VLAN routing', 'OSPF'] },
+          { group: 'Lab tools', items: ['Packet Tracer', 'GNS3', 'containerlab'] },
+          { group: 'Automation', items: ['Python', 'Netmiko', 'Ansible (learning)', 'NetBox (learning)'] },
+          { group: 'Systems', items: ['Linux', 'Windows Server'] },
+          { group: 'Network optimization', items: ['NetworkX', 'PuLP'] },
+          { group: 'AI tools', items: ['Using Claude and ChatGPT to write and review scripts', 'research technical docs', 'draft documentation; always verify the output'] }
+        ],
+        softTitle: 'Soft skills', soft: ['Technical writing', 'Structured self-learning', 'Presenting and sharing knowledge', 'Teamwork', 'Working under pressure and time management'],
+        langTitle: 'Languages',
+        langs: [
+          { name: 'Vietnamese', level: 'Native' },
+          { name: 'English', level: 'Preparing for IELTS 6.5' },
+          { name: 'Chinese', level: 'Learning HSK 1' }
+        ],
+        goalsTitle: 'Certifications and goals',
+        goals: [
+          { name: 'CCNA 200-301 v2.0', status: 'Studying', when: '04/2027', color: UP },
+          { name: 'IELTS Academic 6.5', status: 'Practising', when: '06/2027', color: UP },
+          { name: 'HSK 3 + HSKK', status: 'Learning', when: '08/2027', color: UP },
+          { name: 'Network internship', status: 'Planned', when: '09/2027', color: PLAN }
+        ],
+        postTitle: 'Latest posts', viOnly: 'These posts are in Vietnamese only for now.',
+        keysLine: 'Real labs · Automation · Network optimization'
+      },
+      zh: {
+        nav: { home: '個人簡介', projects: '專案', blog: '部落格', course: '網路實驗課程', links: '連結' },
+        langLabel: '語言',
+        role: '電信系學生 · 網路自動化方向',
+        summary: '我做 Cisco/Juniper 實驗，用 Python 做網路自動化，並用程式最佳化路由與頻寬。正在準備 CCNA v2.0，同時學習英文和中文。',
+        areaLabel: '地區', dobLabel: '出生日期', phoneLabel: '電話', eduShortLabel: '求職方向', wantVal: '網路／NOC 實習', gradLabel: '可到職時間',
+        eduTitle: '學歷', careerTitle: '職涯方向',
+        careers: [
+          { term: '短期', when: '2026 – 2027', role: '網路／NOC 實習生', desc: '通過 CCNA v2.0，在 GitHub 完成 3 個自動化專案，並透過實習累積實際的網路維運經驗。' },
+          { term: '中期', when: '2028 – 2030', role: '網路工程師', desc: '設計、建置與維運企業網路；準備 CCNP Enterprise；將自動化導入日常維運。' },
+          { term: '長期', when: '2030 年以後', role: '網路自動化工程師', desc: '專精以程式實現網路自動化與最佳化，能以英文和中文與國際夥伴合作。' }
+        ],
+        aboutTitle: '關於我', contactTitle: '個人資料', socialTitle: '社群',
+        edu: { school: '[學校名稱]', time: '[入學] – [畢業]', major: '電信工程', courses: '本學期課程：進階網路基礎架構管理、Linux 系統管理、Windows 系統管理、光纖網路與應用。' },
+        projTitle: '專案', stateNow: '進行中', statePlan: '規劃中', seeAll: '查看全部',
+        ghNote: '專案資訊在網站建置時自動從 GitHub 取得。',
+        projects: [
+          { repo: 'config-backup', status: '進行中', title: '自動備份設定檔', desc: '同時擷取多台設備的 running-config，依日期保存，並標示連線失敗的設備。', stack: ['Python', 'Netmiko'], live: true },
+          { repo: 'net-optimizer', status: '01–04/2027', title: '路由與頻寬最佳化', desc: '以線性規劃分配頻寬，計算最短路徑與備援路徑。', stack: ['NetworkX', 'PuLP'], live: false },
+          { repo: 'bgp-lab-as-code', status: '05–08/2027', title: '以程式碼建置 BGP 實驗', desc: '整個 BGP 拓撲寫在一個檔案裡，幾分鐘內重建。', stack: ['containerlab', 'FRR', 'Ansible'], live: false }
+        ],
+        skillsTitle: '技能',
+        skills: [
+          { group: '網路', items: ['子網劃分', 'VLAN、Trunk', 'STP', 'VLAN 間路由', 'OSPF'] },
+          { group: '實驗工具', items: ['Packet Tracer', 'GNS3', 'containerlab'] },
+          { group: '自動化', items: ['Python', 'Netmiko', 'Ansible（學習中）', 'NetBox（學習中）'] },
+          { group: '系統', items: ['Linux', 'Windows Server'] },
+          { group: '網路最佳化', items: ['NetworkX', 'PuLP'] },
+          { group: 'AI 應用', items: ['使用 Claude、ChatGPT 撰寫與審查腳本', '查閱技術文件', '撰寫文件，並一律自行驗證結果'] }
+        ],
+        softTitle: '軟實力', soft: ['技術文件撰寫', '有計畫的自學', '知識分享與簡報', '團隊合作', '抗壓性與時間管理'],
+        langTitle: '語言能力',
+        langs: [
+          { name: '越南語', level: '母語' },
+          { name: '英文', level: '準備 IELTS 6.5' },
+          { name: '中文', level: '學習 HSK 1 中' }
+        ],
+        goalsTitle: '證照與目標',
+        goals: [
+          { name: 'CCNA 200-301 v2.0', status: '準備中', when: '04/2027', color: UP },
+          { name: 'IELTS Academic 6.5', status: '練習中', when: '06/2027', color: UP },
+          { name: 'HSK 3 + HSKK', status: '學習中', when: '08/2027', color: UP },
+          { name: '網路相關實習', status: '計畫中', when: '09/2027', color: PLAN }
+        ],
+        postTitle: '最新文章', viOnly: '這些文章目前只有越南文版本。',
+        keysLine: '真實實驗 · 自動化 · 網路最佳化'
+      }
+    };
+    var lang = this.state.lang || this.props.startLang || 'vi';
+    if (lang === 'zh-hant') lang = 'zh';
+    var collapsed = false;
+    var t = D[lang];
+    t.projects = t.projects.map(function (p) {
+      return Object.assign({}, p, { chipBg: p.live ? '#E4F0E7' : '#F1EDE5', chipFg: p.live ? '#2A6E47' : '#5E6B62' });
+    });
+    var PER = { 'config-backup': '10 – 12/2026', 'net-optimizer': '01 – 04/2027', 'bgp-lab-as-code': '05 – 08/2027' };
+    var projects = t.projects.map(function (p) {
+      return { repo: p.repo, title: p.title, desc: p.desc, period: PER[p.repo], state: p.live ? t.stateNow : t.statePlan,
+        stateColor: p.live ? '#1E7A45' : '#7A6A5A', stackStr: p.stack.join(' · ') };
+    });
+    var skills = t.skills.map(function (k) { return { group: k.group, itemsStr: k.items.join(', ') }; });
+    var posts = [
+      { tag: 'Hành trình', title: 'Mình là ai và vì sao bắt đầu học công khai', when: 'Tuần 1 · 10/2026' },
+      { tag: 'Lab thực hành', title: 'Dựng lab VLAN + Inter-VLAN routing từ con số 0', when: 'Tuần 2 · 10/2026' },
+      { tag: 'Tự động hóa', title: 'Backup cấu hình 10 thiết bị trong 30 giây với Netmiko', when: 'Tuần 3 · 10/2026' }
+    ];
+    var self = this;
+    var setLang = function (l) { return function () { self.setState({ lang: l }); }; };
+    var order = ['vi', 'en', 'zh'];
+    var toggleLabel = { vi: collapsed ? 'Mở rộng menu' : 'Thu gọn menu', en: collapsed ? 'Expand menu' : 'Collapse menu', zh: collapsed ? '展開選單' : '收合選單' }[lang];
+    return {
+      t: t, posts: posts, projects: projects, skills: skills,
+      showViOnly: lang !== 'vi',
+      collapsed: collapsed, expanded: !collapsed, expandedStr: collapsed ? 'false' : 'true',
+      sideW: collapsed ? '88px' : '276px', tilePad: collapsed ? '0' : '0 14px', tileJustify: collapsed ? 'center' : 'flex-start',
+      toggleJustify: collapsed ? 'center' : 'flex-start',
+      toggleLabel: toggleLabel,
+      toggle: function () { self.setState({ collapsed: !collapsed }); },
+      clsVi: lang === 'vi' ? 'lang on' : 'lang',
+      clsEn: lang === 'en' ? 'lang on' : 'lang',
+      clsZh: lang === 'zh' ? 'lang on' : 'lang',
+      setVi: setLang('vi'), setEn: setLang('en'), setZh: setLang('zh'),
+      langShort: { vi: 'VI', en: 'EN', zh: '繁中' }[lang],
+      cycleLang: function () { self.setState({ lang: order[(order.indexOf(lang) + 1) % 3] }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

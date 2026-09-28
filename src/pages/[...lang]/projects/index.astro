@@ -1,0 +1,272 @@
+---
+/**
+ * Danh sách project: repo GitHub có topic "portfolio" + project khai báo tay (src/content/projects).
+ * Mỗi dòng dẫn tới trang chi tiết /projects/<tên>/.
+ */
+import Base from '../../../layouts/Base.astro';
+import SocialIcon from '../../../components/profile/SocialIcon.astro';
+import { localeFromParam, localeStaticPaths, localizePath, useT } from '../../../i18n';
+import { formatPostDate } from '../../../lib/blog';
+import { pick, profile } from '../../../lib/data';
+import { getProjects } from '../../../lib/projects';
+
+export const getStaticPaths = localeStaticPaths;
+
+const locale = localeFromParam(Astro.params.lang);
+const t = useT(locale);
+const pr = t.projects;
+const L = (value: Parameters<typeof pick>[0]) => pick(value, locale);
+const fill = (template: string, values: Record<string, string>) =>
+  template.replace(/\{(\w+)\}/g, (_, key) => values[key] ?? '');
+
+
+const projects = (await getProjects()).map((p) => {
+  const gh = p.github;
+  const meta = [
+    gh?.language ?? (p.stack.length ? p.stack.join(' · ') : null),
+    gh && p.period && fill(pr.updated, { date: formatPostDate(new Date(gh.updatedAt), locale) }),
+    gh && gh.stars > 0 && fill(pr.stars, { n: String(gh.stars) }),
+    gh && gh.topics.length > 0 && gh.topics.map((topic) => `#${topic}`).join(' '),
+  ].filter(Boolean);
+  return {
+    href: localizePath(locale, `/projects/${p.slug}/`),
+    title: L(p.title),
+    description: L(p.description),
+    period: p.period ?? (gh ? formatPostDate(new Date(gh.updatedAt), locale) : undefined),
+    status: p.status,
+    meta,
+  };
+});
+
+const githubUrl = profile.social.github || `https://github.com/${profile.githubUsername}`;
+---
+
+<Base locale={locale} title={t.nav.projects} current="projects">
+  <header class="head">
+    <h1 class="title">{t.nav.projects}</h1>
+    <a class="gh-btn" href={githubUrl} rel="me noopener">
+      <SocialIcon network="github" />
+      <span>{pr.githubProfile}</span>
+    </a>
+  </header>
+
+  {
+    projects.length > 0 ? (
+      <div class="table">
+        <div class="thead" aria-hidden="true">
+          <span class="th-when">{pr.colWhen}</span>
+          <span>{pr.colProject}</span>
+        </div>
+        <ul class="rows">
+          {projects.map((p) => (
+            <li>
+              <a class="row lift" href={p.href}>
+                <span class="when dot">
+                  {p.period && <span class="period">{p.period}</span>}
+                  {p.status && (
+                    <span class:list={['status', `status-${p.status}`]}>
+                      {t.profile.projectStatus[p.status]}
+                    </span>
+                  )}
+                </span>
+                <span class="main">
+                  <span class="ttl">{p.title}</span>
+                  {p.description && <span class="desc">{p.description}</span>}
+                  {p.meta.length > 0 && <span class="meta">{p.meta.join(' · ')}</span>}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ) : (
+      <p class="empty">{pr.empty}</p>
+    )
+  }
+</Base>
+
+<style>
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding-top: 16px;
+  }
+  /* Chữ nằm trực tiếp trên video nền → màu sáng; dòng nổi lên nền trắng khi trỏ chuột → chữ tối lại */
+  .title {
+    font-size: 48px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--on-video);
+    text-shadow: var(--on-video-shadow);
+  }
+  .gh-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 14px;
+    border: 1px solid var(--green);
+    border-radius: var(--radius-btn);
+    background: var(--green);
+    color: #fff;
+    font-size: 14px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background var(--ease), border-color var(--ease), transform var(--ease), box-shadow var(--ease);
+  }
+  .gh-btn:hover {
+    color: #fff;
+    background: var(--green-hover);
+    border-color: var(--green-hover);
+    transform: translateY(var(--lift-btn));
+    box-shadow: var(--shadow-lift);
+  }
+
+  .table {
+    margin-top: 28px;
+  }
+  .thead,
+  .row {
+    display: grid;
+    grid-template-columns: 160px minmax(0, 1fr);
+    gap: 24px;
+  }
+  .thead {
+    padding: 0 20px 10px;
+    border-bottom: 1px solid var(--on-video-line);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--on-video-muted);
+    text-shadow: var(--on-video-shadow);
+    text-align: left;
+  }
+  .th-when {
+    padding-left: var(--star-indent);
+  }
+  .rows {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .row {
+    align-items: start;
+    padding: 18px 20px;
+    border: 1px solid transparent;
+    border-bottom-color: var(--on-video-line);
+    border-radius: var(--radius-row);
+    color: var(--on-video);
+    text-shadow: var(--on-video-shadow);
+    text-decoration: none;
+  }
+  .when {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--on-video-muted);
+    text-shadow: var(--on-video-shadow);
+    text-align: left;
+  }
+  .when.dot::before {
+    background: var(--brown-on-video);
+  }
+  .status-dang-lam,
+  .status-xong {
+    color: var(--ok-on-video);
+  }
+  .status-du-kien {
+    color: var(--plan-on-video);
+  }
+  .ttl,
+  .desc,
+  .meta,
+  .when,
+  .status {
+    transition: color var(--ease);
+  }
+  .row:hover {
+    color: var(--ink);
+  }
+  .row:hover,
+  .row:hover * {
+    text-shadow: none;
+  }
+  .row:hover .ttl {
+    color: var(--accent);
+  }
+  .main {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+  .ttl {
+    font-size: 18px;
+    line-height: 1.35;
+  }
+  .desc {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--on-video-muted);
+    text-shadow: var(--on-video-shadow);
+  }
+  .meta {
+    margin-top: 2px;
+    font-size: 13px;
+    color: var(--on-video-muted);
+    text-shadow: var(--on-video-shadow);
+  }
+  .empty {
+    margin: 0;
+    padding: 18px 20px;
+    color: var(--on-video-muted);
+    text-shadow: var(--on-video-shadow);
+  }
+
+  @media (max-width: 1023.98px) {
+    .head {
+      padding-top: 0;
+    }
+    .title {
+      font-size: 40px;
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    .thead {
+      display: none;
+    }
+    .table {
+      margin-top: 20px;
+    }
+    .row {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 6px;
+      padding: 14px 10px;
+      border-radius: var(--radius-btn);
+    }
+    .when {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 0 8px;
+      font-size: 13px;
+    }
+    .when .period + .status::before {
+      content: '· ';
+      color: var(--on-video-muted);
+      text-shadow: var(--on-video-shadow);
+    }
+    .main {
+      padding-left: var(--star-indent);
+    }
+    .ttl {
+      font-size: 16px;
+    }
+    .desc {
+      font-size: 14.5px;
+    }
+  }
+</style>

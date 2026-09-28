@@ -1,0 +1,143 @@
+---
+import { Font } from 'astro:assets';
+import SiteHeader, { type NavKey } from '../components/SiteHeader.astro';
+import BackgroundNetwork from '../components/BackgroundNetwork.astro';
+import Analytics from '../components/Analytics.astro';
+import { DEFAULT_LOCALE, HTML_LANG, LOCALES, localizePath, stripLocale, useT, type Locale } from '../i18n';
+import { pick, profile } from '../lib/data';
+import '../styles/global.css';
+
+interface Props {
+  locale: Locale;
+  /** Tiêu đề trang; bỏ trống ở trang chủ để chỉ hiện tên. */
+  title?: string;
+  description?: string;
+  current?: NavKey;
+  /** Trang không có bản dịch riêng (vd. 404) thì không in hreflang. */
+  alternates?: boolean;
+  /** Chỉ in hreflang cho các ngôn ngữ này (vd. bài blog chưa dịch hết). Mặc định: cả 3. */
+  alternateLocales?: readonly Locale[];
+  /** Đường dẫn canonical khác trang đang xem (vd. bài chưa dịch trỏ về bản tiếng Việt). */
+  canonicalPath?: string;
+  ogType?: 'website' | 'article';
+  /** Đường dẫn GoatCounter dùng để gộp lượt xem (vd. 3 bản ngôn ngữ của một bài) */
+  statsPath?: string;
+  /** Ảnh xem trước khi chia sẻ link; mặc định là ảnh chung public/og/og-<ngôn ngữ>.jpg */
+  image?: { src: string; width: number; height: number; alt?: string };
+  /** Dữ liệu có cấu trúc cho Google (schema.org), in ra dạng JSON-LD */
+  jsonLd?: object | object[];
+  /** Không cho công cụ tìm kiếm lập chỉ mục (vd. trang 404) */
+  noindex?: boolean;
+}
+
+const {
+  locale,
+  title,
+  description,
+  current,
+  alternates = true,
+  alternateLocales = LOCALES,
+  canonicalPath,
+  ogType = 'website',
+  statsPath,
+  image,
+  jsonLd,
+  noindex = false,
+} = Astro.props;
+const t = useT(locale);
+
+const fullTitle = title ? `${title} · ${profile.name}` : `${profile.name} — ${pick(profile.role, locale)}`;
+const metaDescription = description ?? `${profile.name} — ${t.site.description}`;
+const canonical = new URL(canonicalPath ?? Astro.url.pathname, Astro.site);
+const here = stripLocale(Astro.url.pathname);
+const OG_LOCALE: Record<Locale, string> = { vi: 'vi_VN', en: 'en_US', 'zh-hant': 'zh_TW' };
+const ogImage = image ?? { src: `/og/og-${locale}.jpg`, width: 1200, height: 630, alt: `${profile.name} — ${t.site.keysLine}` };
+const ogImageUrl = new URL(ogImage.src, Astro.site);
+---
+
+<!doctype html>
+<html lang={HTML_LANG[locale]}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={metaDescription} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+    {
+      alternates && (
+        <>
+          {alternateLocales.map((l) => (
+            <link rel="alternate" hreflang={HTML_LANG[l]} href={new URL(localizePath(l, here), Astro.site)} />
+          ))}
+          <link rel="alternate" hreflang="x-default" href={new URL(localizePath(DEFAULT_LOCALE, here), Astro.site)} />
+        </>
+      )
+    }
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={metaDescription} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={OG_LOCALE[locale]} />
+    <meta property="og:site_name" content={profile.name} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content={String(ogImage.width)} />
+    <meta property="og:image:height" content={String(ogImage.height)} />
+    {ogImage.alt && <meta property="og:image:alt" content={ogImage.alt} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={metaDescription} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="theme-color" content="#0c2530" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="alternate" type="application/rss+xml" title={`${t.nav.blog} · ${profile.name}`} href="/rss.xml" />
+    <Font cssVariable="--font-roboto" preload />
+    <Font cssVariable="--font-noto-tc" />
+    <Analytics statsPath={statsPath} />
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+    <slot name="head" />
+  </head>
+  <body>
+    <BackgroundNetwork />
+    <SiteHeader locale={locale} current={current} langPath={alternates ? undefined : '/'} />
+    <main class="page">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <span>© 2026 {profile.name} · {t.site.keysLine}</span>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .page {
+    flex-grow: 1;
+    width: 100%;
+    min-width: 0;
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: 40px var(--gutter);
+  }
+
+  .site-footer {
+    width: calc(100% - 2 * var(--gutter));
+    max-width: calc(var(--content-max) - 2 * var(--gutter));
+    margin: 0 auto 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--on-video-line);
+    text-align: center;
+    font-size: 14px;
+    color: var(--on-video-muted);
+    text-shadow: var(--on-video-shadow);
+  }
+
+  @media (max-width: 1023.98px) {
+    .page {
+      padding: 24px var(--gutter-mobile) 32px;
+    }
+    .site-footer {
+      width: calc(100% - 2 * var(--gutter-mobile));
+      margin-bottom: 32px;
+    }
+  }
+</style>

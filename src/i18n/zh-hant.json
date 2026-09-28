@@ -1,0 +1,113 @@
+{
+  "lang": {
+    "short": "中文",
+    "name": "繁體中文",
+    "names": {
+      "vi": "越南文",
+      "en": "英文",
+      "zh-hant": "繁體中文"
+    }
+  },
+  "nav": {
+    "label": "主選單",
+    "profile": "個人簡介",
+    "projects": "專案",
+    "blog": "部落格",
+    "language": "語言",
+    "switchTo": "切換至"
+  },
+  "site": {
+    "description": "通訊與電腦網路科系學生。真實實驗、自動化、網路最佳化。",
+    "keysLine": "真實實驗 · 自動化 · 網路最佳化"
+  },
+  "profile": {
+    "contactTitle": "個人資料",
+    "birthDate": "出生日期",
+    "phone": "電話",
+    "email": "電子郵件",
+    "area": "地區",
+    "socialTitle": "社群",
+    "socialLabel": "{name} 的 {network}",
+    "skillsTitle": "技能",
+    "softTitle": "軟實力",
+    "languagesTitle": "語言能力",
+    "aboutTitle": "關於我",
+    "careerTitle": "職涯方向",
+    "desiredPosition": "求職方向",
+    "availableFrom": "可到職時間",
+    "projectsTitle": "專案",
+    "projectStatus": {
+      "dang-lam": "進行中",
+      "du-kien": "規劃中",
+      "xong": "已完成"
+    },
+    "educationTitle": "學歷",
+    "expectedGraduation": "預計畢業",
+    "goalsTitle": "證照與目標",
+    "goalStatus": {
+      "dang-on": "準備中",
+      "dat": "已取得",
+      "ke-hoach": "計畫中"
+    },
+    "postsTitle": "最新文章",
+    "seeAll": "查看全部",
+    "noPosts": "第一篇文章即將發布。",
+    "photoAlt": "{name} 的照片",
+    "photoPlaceholder": "大頭照 3:4"
+  },
+  "notFound": {
+    "title": "找不到頁面",
+    "text": "您要找的頁面不存在或已移動。請使用上方選單返回。"
+  },
+  "blog": {
+    "description": "實驗、自動化、以程式最佳化網路、語言學習與自學歷程。每兩週更新一篇。",
+    "searchLabel": "搜尋文章",
+    "searchPlaceholder": "VLAN、OSPF、Netmiko…",
+    "filterLabel": "依主題篩選",
+    "all": "全部",
+    "colDate": "日期",
+    "colTitle": "標題",
+    "colTag": "主題",
+    "channel": "首發於 {channel}",
+    "viOnlyBadge": "僅越南文",
+    "noResults": "找不到相符的文章，請換個關鍵字。",
+    "noPosts": "第一篇文章即將發布。",
+    "noPostsInTag": "這個主題還沒有文章。",
+    "viOnlyNotice": "這篇文章目前只有越南文版本。",
+    "readingTime": "閱讀約 {n} 分鐘",
+    "toc": "目錄",
+    "related": "相關文章",
+    "updated": "更新於 {date}",
+    "allPosts": "所有文章",
+    "rssTitle": "{name} 的部落格",
+    "tags": {
+      "lab": "實作實驗",
+      "automation": "自動化",
+      "optimization": "網路最佳化",
+      "language": "語言學習",
+      "journey": "學習歷程"
+    },
+    "views": "{n} 次瀏覽",
+    "colViews": "瀏覽"
+  },
+  "projects": {
+    "colWhen": "時間",
+    "colProject": "專案",
+    "updated": "更新於 {date}",
+    "stars": "{n} 顆星",
+    "viewOnGithub": "在 GitHub 上查看",
+    "homepage": "線上展示",
+    "githubProfile": "我的 GitHub",
+    "notesTitle": "筆記",
+    "readmeTitle": "README",
+    "planned": "此專案仍在規劃階段，開始實作後會將原始碼發布到 GitHub。",
+    "noReadme": "這個儲存庫還沒有 README。",
+    "empty": "目前還沒有專案。",
+    "allProjects": "所有專案",
+    "stack": "技術",
+    "topics": "主題",
+    "language": "語言",
+    "updatedLabel": "更新"
+  },
+  "placeholder": "此頁面將在下一步建置。"
+}

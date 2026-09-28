@@ -1,0 +1,19 @@
+---
+/**
+ * Chỗ hiện số lượt xem của một đường dẫn. Ẩn cho tới khi lấy được số (components/Analytics.astro điền vào).
+ * Chưa bật GoatCounter (site.json trống) thì không hiện gì.
+ */
+import { site } from '../lib/data';
+
+interface Props {
+  /** Đường dẫn đã đếm, vd. "/blog/dung-lab-vlan/" */
+  path: string;
+  /** Mẫu chữ, {n} là con số, vd. "{n} lượt xem" */
+  template?: string;
+  class?: string;
+}
+
+const { path, template = '{n}', class: className } = Astro.props;
+---
+
+{site.goatcounter && <span class={className} data-views={path} data-template={template} hidden />}
