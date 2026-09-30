@@ -1,8 +1,8 @@
 ---
 repo: bgp-lab-as-code
-order: 3
-featured: true
-period: "05 – 08/2027"
+order: 4
+featured: false
+period: "2027"
 status: du-kien
 stack: [containerlab, FRR, Ansible]
 title:

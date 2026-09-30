@@ -1,9 +1,9 @@
 ---
 repo: config-backup
-order: 1
+order: 2
 featured: true
-period: "10 – 12/2026"
-status: dang-lam
+period: "2027"
+status: du-kien
 stack: [Python, Netmiko]
 title:
   vi: Sao lưu cấu hình tự động

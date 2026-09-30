@@ -120,9 +120,9 @@
         "zh-hant": "英文"
       },
       "level": {
-        "vi": "Đang luyện IELTS 6.5",
-        "en": "Preparing for IELTS 6.5",
-        "zh-hant": "準備 IELTS 6.5"
+        "vi": "Đang luyện TOEIC",
+        "en": "Preparing for TOEIC",
+        "zh-hant": "準備 TOEIC"
       }
     },
     {
@@ -132,9 +132,9 @@
         "zh-hant": "中文"
       },
       "level": {
-        "vi": "Đang học HSK 4",
-        "en": "Learning HSK 4",
-        "zh-hant": "學習 HSK 4 中"
+        "vi": "Giao tiếp hằng ngày, đang học HSK 4",
+        "en": "Conversational, studying for HSK 4",
+        "zh-hant": "日常會話，準備 HSK 4"
       }
     }
   ]

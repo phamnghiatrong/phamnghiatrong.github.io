@@ -95,7 +95,7 @@ const facts = [
       }
     </header>
 
-    {!gh && <p class="notice">{pr.planned}</p>}
+    {!gh && project.status !== 'xong' && <p class="notice">{pr.planned}</p>}
 
     {
       Notes && (

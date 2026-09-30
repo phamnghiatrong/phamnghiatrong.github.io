@@ -1,8 +1,8 @@
 ---
 repo: net-optimizer
-order: 2
+order: 3
 featured: true
-period: "01 – 04/2027"
+period: "2027"
 status: du-kien
 stack: [NetworkX, PuLP]
 title:

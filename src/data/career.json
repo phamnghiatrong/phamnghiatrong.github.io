@@ -1,36 +1,76 @@
 {
   "stages": [
     {
-      "term": { "vi": "Ngắn hạn", "en": "Short term", "zh-hant": "短期" },
-      "when": { "vi": "2026 – 2027", "en": "2026 – 2027", "zh-hant": "2026 – 2027" },
-      "role": { "vi": "Thực tập sinh mạng", "en": "Network intern", "zh-hant": "網路實習生" },
+      "term": {
+        "vi": "Ngắn hạn",
+        "en": "Short term",
+        "zh-hant": "短期"
+      },
+      "when": {
+        "vi": "2026 – 2027",
+        "en": "2026 – 2027",
+        "zh-hant": "2026 – 2027"
+      },
+      "role": {
+        "vi": "Thực tập sinh mạng",
+        "en": "Network intern",
+        "zh-hant": "網路實習生"
+      },
       "description": {
-        "vi": "Đạt CCNA v2.0, hoàn thành 3 dự án tự động hóa trên GitHub và có kinh nghiệm vận hành mạng thực tế qua kỳ thực tập.",
-        "en": "Pass CCNA v2.0, finish 3 automation projects on GitHub, and gain hands-on network operations experience through an internship.",
-        "zh-hant": "通過 CCNA v2.0，在 GitHub 完成 3 個自動化專案，並透過實習累積實際的網路維運經驗。"
+        "vi": "Đạt HSK 4, đưa các lab Linux, Windows Server và mạng lên GitHub, có kinh nghiệm vận hành thực tế qua kỳ thực tập.",
+        "en": "Pass HSK 4, publish Linux, Windows Server and networking labs on GitHub, and gain hands-on operations experience through an internship.",
+        "zh-hant": "通過 HSK 4，將 Linux、Windows Server 與網路實驗放上 GitHub，並透過實習累積實際維運經驗。"
       }
     },
     {
-      "term": { "vi": "Trung hạn", "en": "Mid term", "zh-hant": "中期" },
-      "when": { "vi": "2028 – 2030", "en": "2028 – 2030", "zh-hant": "2028 – 2030" },
-      "role": { "vi": "Kỹ sư mạng", "en": "Network Engineer", "zh-hant": "網路工程師" },
+      "term": {
+        "vi": "Trung hạn",
+        "en": "Mid term",
+        "zh-hant": "中期"
+      },
+      "when": {
+        "vi": "2028 – 2030",
+        "en": "2028 – 2030",
+        "zh-hant": "2028 – 2030"
+      },
+      "role": {
+        "vi": "Kỹ sư mạng",
+        "en": "Network Engineer",
+        "zh-hant": "網路工程師"
+      },
       "description": {
-        "vi": "Thiết kế, triển khai và vận hành hạ tầng mạng doanh nghiệp; ôn CCNP Enterprise; đưa tự động hóa vào công việc vận hành hằng ngày.",
-        "en": "Design, deploy and operate enterprise networks; study for CCNP Enterprise; bring automation into daily operations.",
-        "zh-hant": "設計、建置與維運企業網路；準備 CCNP Enterprise；將自動化導入日常維運。"
+        "vi": "Thi CCNA v2.0 đầu năm 2028; thiết kế, triển khai và vận hành hạ tầng mạng doanh nghiệp; đưa tự động hóa vào công việc vận hành hằng ngày.",
+        "en": "Take CCNA v2.0 in early 2028; design, deploy and operate enterprise networks; bring automation into daily operations.",
+        "zh-hant": "2028 年初參加 CCNA v2.0 考試；設計、建置與維運企業網路；將自動化導入日常維運。"
       }
     },
     {
-      "term": { "vi": "Dài hạn", "en": "Long term", "zh-hant": "長期" },
-      "when": { "vi": "2030 trở đi", "en": "2030 onward", "zh-hant": "2030 年以後" },
-      "role": { "vi": "Đang cân nhắc", "en": "Still deciding", "zh-hant": "考慮中" },
-      "description": { "vi": "", "en": "", "zh-hant": "" }
+      "term": {
+        "vi": "Dài hạn",
+        "en": "Long term",
+        "zh-hant": "長期"
+      },
+      "when": {
+        "vi": "2030 trở đi",
+        "en": "2030 onward",
+        "zh-hant": "2030 年以後"
+      },
+      "role": {
+        "vi": "Đang cân nhắc",
+        "en": "Still deciding",
+        "zh-hant": "考慮中"
+      },
+      "description": {
+        "vi": "",
+        "en": "",
+        "zh-hant": ""
+      }
     }
   ],
   "desiredPosition": {
-    "vi": "Thực tập mạng",
-    "en": "Network internship",
-    "zh-hant": "網路實習"
+    "vi": "Thực tập mạng / hệ thống",
+    "en": "Network / systems internship",
+    "zh-hant": "網路／系統實習"
   },
-  "availableFrom": "08/2027"
+  "availableFrom": "07/2027"
 }
